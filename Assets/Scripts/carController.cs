@@ -46,6 +46,11 @@ public class carController : MonoBehaviour {
             transform.Rotate(Vector3.forward * -turning);
         }
 
+        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+        {
+            rigidbody2D.drag = friction * 2;
+        }
+
     }
 
 }
