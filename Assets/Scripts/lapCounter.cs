@@ -14,6 +14,7 @@ public class lapCounter : MonoBehaviour {
     float currentLapTime = 0f;
     float bestLapTime = 0f;
     float raceTime = 0f;
+    public static int maxLaps;
 
     trackLapTrigger next;
 
@@ -43,7 +44,7 @@ public class lapCounter : MonoBehaviour {
     {
         if (currentLapMesh)
         {
-            currentLapMesh.text = string.Format("Lap {0}", _lap);
+            currentLapMesh.text = string.Format("Lap {0}/{1}", _lap, maxLaps);
         }
         bestLapMesh.text = timeFloatToString(bestLapTime);
     }
