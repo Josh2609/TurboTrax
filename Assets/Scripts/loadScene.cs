@@ -7,7 +7,7 @@ public class loadScene : MonoBehaviour {
 
     public void nextScene(string scene)
     {
-        carController.maxLaps = 5;
+        lapCounter.maxLaps = 5;
         SceneManager.LoadScene(scene);
     }
 }

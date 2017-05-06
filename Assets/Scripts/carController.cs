@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
+
+
 
 public class carController : NetworkBehaviour{
 
-
-    public trackLapTrigger first;
-    public TextMesh currentLapMesh;
-    int _lap;
 
     public float acceleration = 3;
     public float maxSpeed = 10;
@@ -18,9 +17,6 @@ public class carController : NetworkBehaviour{
     Rigidbody2D rigidbody2D;
     Sprite[] carSprites;
 
-    public static int maxLaps = 3;
-
-    trackLapTrigger next;
 
     public Camera camera;
 
@@ -34,43 +30,12 @@ public class carController : NetworkBehaviour{
     {
     }
 
-    void UpdateText()
-    {
-
-            currentLapMesh.text = string.Format("Lap {0}/{1}", _lap, maxLaps);
-
-    }
-
-    // when lap trigger is entered
-    public void OnLapTrigger(trackLapTrigger trigger)
-    {
-            if (trigger == next)
-            {
-                if (first == next)
-                {
-                    _lap++;
-                    UpdateText();
-                }
-                SetNextTrigger(next);
-            }
-    }
-
-    void SetNextTrigger(trackLapTrigger trigger)
-    {
-        next = trigger.next;
-        SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);
-    }
 
     public override void OnStartLocalPlayer()
     {
         camera.enabled = true;
         this.GetComponent<SpriteRenderer>().sprite = carSprites[0];
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        currentLapMesh = (TextMesh)GameObject.Find("LapCounter").GetComponentInChildren(typeof(TextMesh));
-        first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
-        _lap = 0;
-        SetNextTrigger(first);
-        UpdateText();   
+        rigidbody2D = GetComponent<Rigidbody2D>();  
     }
 
     void FixedUpdate()

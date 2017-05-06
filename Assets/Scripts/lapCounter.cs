@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 
 public class lapCounter : MonoBehaviour {
 
     public trackLapTrigger first;
     public TextMesh currentLapMesh;
-    public TextMesh currentLapTimeMesh;
-    public TextMesh raceTimeMesh;
-    public TextMesh bestLapMesh;
+    public Text lapText;
+    //public TextMesh currentLapTimeMesh;
+    //public TextMesh raceTimeMesh;
+    //public TextMesh bestLapMesh;
 
     float currentLapTime = 0f;
     float bestLapTime = 0f;
     float raceTime = 0f;
-    int maxLaps;
+    public static int maxLaps;
 
     trackLapTrigger next;
 
-    int _lap;
+    int currentLap = 0;
 
     // Use this for initialization
     void Start()
     {
-        raceTime = 0f;
-        currentLapTime = 0f;
-        bestLapTime = 0f;
-        _lap = 0;
+       // currentLapMesh = (TextMesh)GameObject.Find("LapCounter").GetComponentInChildren(typeof(TextMesh));
+        first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
         SetNextTrigger(first);
         UpdateText();
     }
@@ -35,8 +35,8 @@ public class lapCounter : MonoBehaviour {
     {
         currentLapTime += Time.deltaTime;
         raceTime += Time.deltaTime;
-        currentLapTimeMesh.text = timeFloatToString(currentLapTime);
-        raceTimeMesh.text = timeFloatToString(raceTime);
+       // currentLapTimeMesh.text = timeFloatToString(currentLapTime);
+        //raceTimeMesh.text = timeFloatToString(raceTime);
     }
 
     // update lap counter text
@@ -44,9 +44,9 @@ public class lapCounter : MonoBehaviour {
     {
         if (currentLapMesh)
         {
-            currentLapMesh.text = string.Format("Lap {0}/{1}", _lap, maxLaps);
+            currentLapMesh.text = string.Format("Lap {0}/{1}", currentLap, maxLaps);
         }
-        bestLapMesh.text = timeFloatToString(bestLapTime);
+        //bestLapMesh.text = timeFloatToString(bestLapTime);
     }
 
     // when lap trigger is entered
@@ -63,7 +63,7 @@ public class lapCounter : MonoBehaviour {
                 {
                     bestLapTime = currentLapTime;
                 }
-                _lap++;
+                currentLap++;
                 currentLapTime = 0f;
                 UpdateText();
             }
