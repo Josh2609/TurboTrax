@@ -460,7 +460,8 @@ PlayerSettings:
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
   vrEditorSettings: {}
-  cloudServicesEnabled: {}
+  cloudServicesEnabled:
+    UNet: 1
   cloudProjectId: 0c4e207f-384c-4a9c-b66c-674f155739b5
   projectName: Turbo Trax
   organizationId: joshcorps-btinternet-com

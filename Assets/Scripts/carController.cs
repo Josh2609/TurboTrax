@@ -16,14 +16,17 @@ public class carController : NetworkBehaviour{
     public Vector2 currentSpeed;
     Rigidbody2D rigidbody2D;
     Sprite[] carSprites;
+    public TextMesh playerID;
 
 
     public Camera camera;
+    public MeshRenderer lapCounter;
 
     void Awake()
     {
         carSprites = Resources.LoadAll<Sprite>("Car");
         camera.enabled = false;
+        lapCounter.enabled = false;
     }
 
     void Start()
@@ -33,7 +36,9 @@ public class carController : NetworkBehaviour{
 
     public override void OnStartLocalPlayer()
     {
+        playerID.text = "ID: " + Network.player.ToString();
         camera.enabled = true;
+        lapCounter.enabled = true;
         this.GetComponent<SpriteRenderer>().sprite = carSprites[0];
         rigidbody2D = GetComponent<Rigidbody2D>();  
     }

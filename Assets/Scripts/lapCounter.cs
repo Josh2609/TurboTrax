@@ -8,7 +8,6 @@ public class lapCounter : MonoBehaviour {
 
     public trackLapTrigger first;
     public TextMesh currentLapMesh;
-    public Text lapText;
     //public TextMesh currentLapTimeMesh;
     //public TextMesh raceTimeMesh;
     //public TextMesh bestLapMesh;
@@ -16,7 +15,7 @@ public class lapCounter : MonoBehaviour {
     float currentLapTime = 0f;
     float bestLapTime = 0f;
     float raceTime = 0f;
-    public static int maxLaps;
+    public static int maxLaps = 3;
 
     trackLapTrigger next;
 
