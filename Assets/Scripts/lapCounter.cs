@@ -14,7 +14,7 @@ public class lapCounter : MonoBehaviour {
     float currentLapTime = 0f;
     float bestLapTime = 0f;
     float raceTime = 0f;
-    public static int maxLaps;
+    int maxLaps;
 
     trackLapTrigger next;
 

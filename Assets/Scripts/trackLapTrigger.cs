@@ -10,7 +10,7 @@ public class trackLapTrigger : MonoBehaviour {
     // when an object enters this trigger
     void OnTriggerEnter2D(Collider2D other)
     {
-        lapCounter carLapCounter = other.gameObject.GetComponent<lapCounter>();
+        carController carLapCounter = other.gameObject.GetComponent<carController>();
         if (carLapCounter)
         {
             Debug.Log("lap trigger " + gameObject.name);
