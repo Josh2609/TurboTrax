@@ -10,6 +10,8 @@ public class carController : NetworkBehaviour{
 
     [SyncVar]
     public string playerName = "player";
+
+    [SyncVar]
     public Color playerColor = Color.blue;
    
     public float acceleration = 3;
@@ -34,6 +36,9 @@ public class carController : NetworkBehaviour{
 
     void Start()
     {
+        
+            setColor();
+
     }
 
 
@@ -42,7 +47,7 @@ public class carController : NetworkBehaviour{
         playerID.text = "ID: " + Network.player.ToString();
         camera.enabled = true;
         lapCounter.enabled = true;
-        setColor();
+        
         rigidbody2D = GetComponent<Rigidbody2D>();  
     }
 
