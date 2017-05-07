@@ -9,8 +9,10 @@ public class NetworkLobbyHook : LobbyHook {
     {
         LobbyPlayer lobby = lobbyPlayer.GetComponent<LobbyPlayer>();
         carController localPlayer = gamePlayer.GetComponent<carController>();
+        lapCounter playerLapCounter = gamePlayer.GetComponent<lapCounter>();
 
         localPlayer.playerName = lobby.playerName;
+        playerLapCounter.playerName = lobby.playerName;
         localPlayer.playerColor = lobby.playerColor;
     }
 }

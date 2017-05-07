@@ -36,8 +36,7 @@ public class carController : NetworkBehaviour{
 
     void Start()
     {
-        
-            setColor();
+         setColor();
 
     }
 
@@ -115,6 +114,9 @@ public class carController : NetworkBehaviour{
         // ********** MOVEMENT END **********
     }
 
-    
+    public void playerFinish()
+    {
+
+    }
 
 }

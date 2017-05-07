@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class lapCounter : MonoBehaviour {
 
+    public string playerName = "player";
+
     public trackLapTrigger first;
     public TextMesh currentLapMesh;
     //public TextMesh currentLapTimeMesh;
@@ -15,11 +17,11 @@ public class lapCounter : MonoBehaviour {
     float currentLapTime = 0f;
     float bestLapTime = 0f;
     float raceTime = 0f;
-    public static int maxLaps = 3;
+    public static int maxLaps = 1;
 
     trackLapTrigger next;
 
-    int currentLap = 0;
+    int currentLap = 1;
 
     // Use this for initialization
     void Start()
@@ -55,6 +57,11 @@ public class lapCounter : MonoBehaviour {
         {
             if (first == next)
             {
+                if (currentLap == maxLaps)
+                {
+                    MPFinish.playerFinished(playerName);
+                }
+
                 if (bestLapTime == 0)
                 {
                     bestLapTime = currentLapTime;
