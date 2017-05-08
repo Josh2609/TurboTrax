@@ -9,7 +9,6 @@ public class lapCounter : MonoBehaviour {
     public string playerName = "player";
 
     public trackLapTrigger first;
-    public TextMesh currentLapMesh;
     //public TextMesh currentLapTimeMesh;
     //public TextMesh raceTimeMesh;
     //public TextMesh bestLapMesh;
@@ -17,16 +16,18 @@ public class lapCounter : MonoBehaviour {
     float currentLapTime = 0f;
     float bestLapTime = 0f;
     float raceTime = 0f;
-    public static int maxLaps = 1;
+    public static int maxLaps = 2;
 
     trackLapTrigger next;
 
     int currentLap = 1;
 
+    public Text lapCounterUI;
     // Use this for initialization
     void Start()
     {
-       // currentLapMesh = (TextMesh)GameObject.Find("LapCounter").GetComponentInChildren(typeof(TextMesh));
+        lapCounterUI.text = currentLap + "/" + maxLaps;
+
         first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
         SetNextTrigger(first);
         UpdateText();
@@ -43,10 +44,8 @@ public class lapCounter : MonoBehaviour {
     // update lap counter text
     void UpdateText()
     {
-        if (currentLapMesh)
-        {
-            currentLapMesh.text = string.Format("Lap {0}/{1}", currentLap, maxLaps);
-        }
+        lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, maxLaps);
+        
         //bestLapMesh.text = timeFloatToString(bestLapTime);
     }
 

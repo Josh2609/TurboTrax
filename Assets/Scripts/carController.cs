@@ -21,31 +21,29 @@ public class carController : NetworkBehaviour{
     public Vector2 currentSpeed;
     Rigidbody2D rigidbody2D;
     Sprite[] carSprites;
-    public TextMesh playerID;
+    public TextMesh playerNameMesh;
+  
 
 
     public Camera camera;
-    public MeshRenderer lapCounter;
 
     void Awake()
     {
         carSprites = Resources.LoadAll<Sprite>("Car");
         camera.enabled = false;
-        lapCounter.enabled = false;
     }
 
     void Start()
     {
          setColor();
-
+      
     }
 
 
     public override void OnStartLocalPlayer()
     {
-        playerID.text = "ID: " + Network.player.ToString();
+        playerNameMesh.text = playerName;
         camera.enabled = true;
-        lapCounter.enabled = true;
         
         rigidbody2D = GetComponent<Rigidbody2D>();  
     }
