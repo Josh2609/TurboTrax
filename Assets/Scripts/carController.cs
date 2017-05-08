@@ -40,6 +40,8 @@ public class carController : NetworkBehaviour{
 
     void Start()
     {
+        ClientScene.RegisterPrefab(bulletPrefab);
+
         MPFinish.addToPlayerList(playerName);
         int joinPosition = MPFinish.getIndexOfPlayer(playerName);
         Debug.Log("joinPosition. = " + joinPosition);
@@ -133,23 +135,21 @@ public class carController : NetworkBehaviour{
         // ********** POWER UP START **********
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            FireGun();
+            CmdFireGun();
         }
         // ********** POWER UP END **********
     }
 
-    void FireGun()
+    [Command]
+    void CmdFireGun()
     {
-        // Create the Bullet from the Bullet Prefab
         var bullet = (GameObject)Instantiate(
             bulletPrefab,
             bulletSpawn.position,
             bulletSpawn.rotation);
-
-        // Add velocity to the bullet
+      
         bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
-
-        // Destroy the bullet after 2 seconds
+        NetworkServer.Spawn(bullet);
         Destroy(bullet, 2.0f);
     }
 
