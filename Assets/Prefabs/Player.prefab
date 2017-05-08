@@ -140,9 +140,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1749934051921062}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -13.23, y: 12.314402, z: 0}
-  m_LocalScale: {x: 2.974491, y: 2.974491, z: 2.974491}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 4601600598818096}
   m_RootOrder: 1
@@ -331,15 +331,15 @@ TextMesh:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1749934051921062}
-  m_Text: ID
+  m_Text: playerfg
   m_OffsetZ: 0
   m_CharacterSize: 0.1
   m_LineSpacing: 1
-  m_Anchor: 0
-  m_Alignment: 0
+  m_Anchor: 4
+  m_Alignment: 1
   m_TabSize: 4
-  m_FontSize: 100
-  m_FontStyle: 0
+  m_FontSize: 20
+  m_FontStyle: 1
   m_RichText: 1
   m_Font: {fileID: 0}
   m_Color:
@@ -418,6 +418,7 @@ MonoBehaviour:
   friction: 3
   currentSpeed: {x: 0, y: 0}
   playerNameMesh: {fileID: 102286832757335064}
+  spawnPoint: {fileID: 0}
   camera: {fileID: 20654489802544768}
 --- !u!114 &114830446787472768
 MonoBehaviour:
@@ -616,7 +617,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 127.5, y: -22.4}
+  m_AnchoredPosition: {x: 127.5, y: -22.400024}
   m_SizeDelta: {x: 255, y: 44.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224768957539541922

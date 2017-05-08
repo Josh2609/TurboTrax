@@ -22,7 +22,8 @@ public class carController : NetworkBehaviour{
     Rigidbody2D rigidbody2D;
     Sprite[] carSprites;
     public TextMesh playerNameMesh;
-  
+
+    public Transform spawnPoint;
 
 
     public Camera camera;
@@ -35,14 +36,28 @@ public class carController : NetworkBehaviour{
 
     void Start()
     {
+        MPFinish.addToPlayerList(playerName);
+        int joinPosition = MPFinish.getIndexOfPlayer(playerName);
+        Debug.Log("joinPosition. = " + joinPosition);
+        spawnPoint = (Transform)GameObject.Find("Spawn" + joinPosition).GetComponent(typeof(Transform));
+        this.transform.position = spawnPoint.position;
+
+
+        playerNameMesh.text = playerName;
          setColor();
-      
+        //this.transform.position = ;
     }
 
 
     public override void OnStartLocalPlayer()
     {
+        
         playerNameMesh.text = playerName;
+
+        
+        //first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
+
+
         camera.enabled = true;
         
         rigidbody2D = GetComponent<Rigidbody2D>();  

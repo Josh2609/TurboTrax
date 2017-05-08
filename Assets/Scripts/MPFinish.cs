@@ -5,6 +5,7 @@ using UnityEngine;
 public class MPFinish : MonoBehaviour {
 
     public static List<string> finishPositions = new List<string>();
+    public static List<string> playerList = new List<string>();
 
     public static void playerFinished(string playerName)
     {
@@ -15,5 +16,15 @@ public class MPFinish : MonoBehaviour {
         {
             Debug.Log("finishPositions. = " + finishPositions[i]);
         }
+    }
+
+    public static void addToPlayerList(string playerName)
+    {
+        playerList.Add(playerName);
+    }
+
+    public static int getIndexOfPlayer(string playerName)
+    {
+        return playerList.IndexOf(playerName); // returns -1 if not found
     }
 }
