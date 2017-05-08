@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class MPFinish : MonoBehaviour {
 
-    public static List<string> finishPositions = new List<string>();
-    public static List<string> playerList = new List<string>();
+    static List<string> finishPositions = new List<string>();
+    static List<string> playerList = new List<string>();
 
     public static void playerFinished(string playerName)
     {
@@ -26,5 +26,10 @@ public class MPFinish : MonoBehaviour {
     public static int getIndexOfPlayer(string playerName)
     {
         return playerList.IndexOf(playerName); // returns -1 if not found
+    }
+
+    public static bool checkIfPlayerFinished(string playerName) // only works for host for some reason
+    {
+        return finishPositions.Contains(playerName);
     }
 }

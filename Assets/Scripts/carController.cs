@@ -14,6 +14,10 @@ public class carController : NetworkBehaviour{
     [SyncVar]
     public Color playerColor = Color.blue;
    
+    //**
+    public GameObject bulletPrefab;
+    public Transform bulletSpawn;
+    //**
     public float acceleration = 3;
     public float maxSpeed = 10;
     public float turning = 2;
@@ -125,6 +129,28 @@ public class carController : NetworkBehaviour{
             rigidbody2D.drag = friction * 2;
         }
         // ********** MOVEMENT END **********
+
+        // ********** POWER UP START **********
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FireGun();
+        }
+        // ********** POWER UP END **********
+    }
+
+    void FireGun()
+    {
+        // Create the Bullet from the Bullet Prefab
+        var bullet = (GameObject)Instantiate(
+            bulletPrefab,
+            bulletSpawn.position,
+            bulletSpawn.rotation);
+
+        // Add velocity to the bullet
+        bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
+
+        // Destroy the bullet after 2 seconds
+        Destroy(bullet, 2.0f);
     }
 
     public void playerFinish()
