@@ -13,7 +13,7 @@ public class NetworkLobbyHook : LobbyHook {
 
 
         localPlayer.playerName = lobby.playerName;
-        playerLapCounter.playerName = lobby.playerName;
+        //playerLapCounter.playerName = lobby.playerName;
         localPlayer.playerColor = lobby.playerColor;
     }
 }

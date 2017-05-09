@@ -29,6 +29,15 @@ public class carController : NetworkBehaviour{
 
     public Transform spawnPoint;
 
+    //**
+    public trackLapTrigger first;
+    trackLapTrigger next;
+    float currentLapTime = 0f;
+    float raceTime = 0f;
+    public static int maxLaps = 1;
+    int currentLap = 1;
+    public Text lapCounterUI;
+    //**
 
     public Camera camera;
 
@@ -40,6 +49,13 @@ public class carController : NetworkBehaviour{
 
     void Start()
     {
+        lapCounterUI.text = currentLap + "/" + maxLaps;
+        if (first == null)
+            Debug.Log("GoodNull");
+        first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
+        SetNextTrigger(first);
+        UpdateText();
+
         Debug.Log(playerName);
         ClientScene.RegisterPrefab(bulletPrefab);
 
@@ -52,21 +68,16 @@ public class carController : NetworkBehaviour{
 
         playerNameMesh.text = playerName;
          setColor();
+
+         
         //this.transform.position = ;
     }
 
 
     public override void OnStartLocalPlayer()
-    {
-        
+    {   
         playerNameMesh.text = playerName;
-
-        
-        //first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
-
-
-        camera.enabled = true;
-        
+        camera.enabled = true; 
         rigidbody2D = GetComponent<Rigidbody2D>();  
     }
 
@@ -99,6 +110,8 @@ public class carController : NetworkBehaviour{
         {
             return;
         }
+        currentLapTime += Time.deltaTime;
+        raceTime += Time.deltaTime;
 
         // ********** MOVEMENT START **********
         currentSpeed = new Vector2(rigidbody2D.velocity.x, rigidbody2D.velocity.y);
@@ -161,6 +174,39 @@ public class carController : NetworkBehaviour{
     public void playerFinish()
     {
 
+    }
+
+    // update lap counter text
+    void UpdateText()
+    {
+        lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, maxLaps);
+    }
+
+    // when lap trigger is entered
+    public void OnLapTrigger(trackLapTrigger trigger)
+    {
+        Debug.Log("PlayerName trig = " + playerName);
+        if (trigger == next)
+        {
+            if (first == next)
+            {
+                if (currentLap == maxLaps)
+                {
+                    MPFinish.playerFinished(playerName);
+                }
+                currentLap++;
+                currentLapTime = 0f;
+                UpdateText();
+            }
+            SetNextTrigger(next);
+        }
+    }
+
+    void SetNextTrigger(trackLapTrigger trigger)
+    {
+        Debug.Log("TRIGGERED!");
+        next = trigger.next;
+        SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);
     }
 
 }

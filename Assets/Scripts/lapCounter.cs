@@ -9,14 +9,10 @@ public class lapCounter : MonoBehaviour {
     public string playerName = "player";
 
     public trackLapTrigger first;
-
+    trackLapTrigger next;
     float currentLapTime = 0f;
-    float bestLapTime = 0f;
     float raceTime = 0f;
     public static int maxLaps = 1;
-
-    trackLapTrigger next;
-
     int currentLap = 1;
 
     public Text lapCounterUI;
@@ -24,7 +20,6 @@ public class lapCounter : MonoBehaviour {
     void Start()
     {
         lapCounterUI.text = currentLap + "/" + maxLaps;
-
         first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
         SetNextTrigger(first);
         UpdateText();
@@ -54,14 +49,6 @@ public class lapCounter : MonoBehaviour {
                 {
                     MPFinish.playerFinished(playerName);
                 }
-
-                if (bestLapTime == 0)
-                {
-                    bestLapTime = currentLapTime;
-                } else if (currentLapTime < bestLapTime)
-                {
-                    bestLapTime = currentLapTime;
-                }
                 currentLap++;
                 currentLapTime = 0f;
                 UpdateText();
@@ -70,7 +57,7 @@ public class lapCounter : MonoBehaviour {
         }
     }
 
-    public String timeFloatToString(float floatTime)
+    public string timeFloatToString(float floatTime)
     {
         TimeSpan time;
         time = TimeSpan.FromSeconds(floatTime);
@@ -83,6 +70,7 @@ public class lapCounter : MonoBehaviour {
 
     void SetNextTrigger(trackLapTrigger trigger)
     {
+        Debug.Log("TRIGGERED!");
         next = trigger.next;
         SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);
     }

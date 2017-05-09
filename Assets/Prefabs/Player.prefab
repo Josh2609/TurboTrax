@@ -26,7 +26,6 @@ GameObject:
   - component: {fileID: 60926345267566920}
   - component: {fileID: 114983463696498656}
   - component: {fileID: 114445745770911168}
-  - component: {fileID: 114956197504289270}
   - component: {fileID: 114976706868636840}
   m_Layer: 0
   m_Name: Player
@@ -559,6 +558,8 @@ MonoBehaviour:
   currentSpeed: {x: 0, y: 0}
   playerNameMesh: {fileID: 102286832757335064}
   spawnPoint: {fileID: 0}
+  first: {fileID: 0}
+  lapCounterUI: {fileID: 114952526232953982}
   camera: {fileID: 20654489802544768}
 --- !u!114 &114830446787472768
 MonoBehaviour:
@@ -646,20 +647,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 0/0
---- !u!114 &114956197504289270
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1033160084180032}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 498faec657970b54aa9f1500dbde79b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerName: player
-  first: {fileID: 0}
-  lapCounterUI: {fileID: 114952526232953982}
 --- !u!114 &114976706868636840
 MonoBehaviour:
   m_ObjectHideFlags: 1
