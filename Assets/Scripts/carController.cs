@@ -40,6 +40,7 @@ public class carController : NetworkBehaviour{
 
     void Start()
     {
+        Debug.Log(playerName);
         ClientScene.RegisterPrefab(bulletPrefab);
 
         MPFinish.addToPlayerList(playerName);
@@ -91,6 +92,10 @@ public class carController : NetworkBehaviour{
     {
 
         if (!isLocalPlayer)
+        {
+            return;
+        }
+        if (MPFinish.checkIfPlayerFinished(playerName))
         {
             return;
         }

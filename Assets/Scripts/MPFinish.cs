@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class MPFinish : MonoBehaviour {
+public class MPFinish : NetworkBehaviour {
 
     static List<string> finishPositions = new List<string>();
     static List<string> playerList = new List<string>();

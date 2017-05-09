@@ -9,9 +9,6 @@ public class lapCounter : MonoBehaviour {
     public string playerName = "player";
 
     public trackLapTrigger first;
-    //public TextMesh currentLapTimeMesh;
-    //public TextMesh raceTimeMesh;
-    //public TextMesh bestLapMesh;
 
     float currentLapTime = 0f;
     float bestLapTime = 0f;
@@ -37,21 +34,18 @@ public class lapCounter : MonoBehaviour {
     {
         currentLapTime += Time.deltaTime;
         raceTime += Time.deltaTime;
-       // currentLapTimeMesh.text = timeFloatToString(currentLapTime);
-        //raceTimeMesh.text = timeFloatToString(raceTime);
     }
 
     // update lap counter text
     void UpdateText()
     {
         lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, maxLaps);
-        
-        //bestLapMesh.text = timeFloatToString(bestLapTime);
     }
 
     // when lap trigger is entered
     public void OnLapTrigger(trackLapTrigger trigger)
     {
+        Debug.Log("PlayerName trig = " + playerName);
         if (trigger == next)
         {
             if (first == next)
