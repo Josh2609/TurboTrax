@@ -33,4 +33,9 @@ public class MPFinish : NetworkBehaviour {
     {
         return finishPositions.Contains(playerName);
     }
+
+    public static bool checkIfAllFinished()
+    {
+        return playerList.Count == finishPositions.Count;
+    }
 }

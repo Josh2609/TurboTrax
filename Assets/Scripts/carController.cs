@@ -13,7 +13,8 @@ public class carController : NetworkBehaviour{
 
     [SyncVar]
     public Color playerColor = Color.blue;
-   
+
+
     //**
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
@@ -171,9 +172,10 @@ public class carController : NetworkBehaviour{
         Destroy(bullet, 2.0f);
     }
 
-    public void playerFinish()
+    void raceFinish()
     {
-
+        //NetworkLobbyManager lobby = (NetworkLobbyManager)GameObject.Find("LobbyManager").GetComponent(typeof(NetworkLobbyManager));
+        //lobby.ServerReturnToLobby();
     }
 
     // update lap counter text
@@ -185,6 +187,7 @@ public class carController : NetworkBehaviour{
     // when lap trigger is entered
     public void OnLapTrigger(trackLapTrigger trigger)
     {
+        raceFinish();
         Debug.Log("PlayerName trig = " + playerName);
         if (trigger == next)
         {
@@ -193,6 +196,10 @@ public class carController : NetworkBehaviour{
                 if (currentLap == maxLaps)
                 {
                     MPFinish.playerFinished(playerName);
+                    if(MPFinish.checkIfAllFinished())
+                    {
+                        raceFinish();
+                    }
                 }
                 currentLap++;
                 currentLapTime = 0f;
