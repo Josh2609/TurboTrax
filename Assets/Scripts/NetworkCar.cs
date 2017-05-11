@@ -47,10 +47,13 @@ public class NetworkCar : NetworkBehaviour {
     int currentLap = 1;
     public Text lapCounterUI;
     //**
+    Sprite[] carSprites;
+
 
     void Awake()
     {
         //register the spaceship in the gamemanager, that will allow to loop on it.
+        carSprites = Resources.LoadAll<Sprite>("Car");
         NetworkGameManager.sCars.Add(this);
         camera.enabled = false;
     }
@@ -70,17 +73,31 @@ public class NetworkCar : NetworkBehaviour {
         SetNextTrigger(first);
         UpdateText();
 
-        Renderer[] rends = GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in rends)
-            r.material.color = color;
+        setColor();
 
-         //We don't want to handle collision on client, so disable collider there
-        _collider2D.enabled = isServer;
 
         if (NetworkGameManager.sInstance != null)
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
             Init();
         }
+    }
+
+    void setColor()
+    {
+        if (color == Color.blue)
+            this.GetComponent<SpriteRenderer>().sprite = carSprites[0];
+        else if (color == Color.cyan)
+            this.GetComponent<SpriteRenderer>().sprite = carSprites[1];
+        else if (color == Color.green)
+            this.GetComponent<SpriteRenderer>().sprite = carSprites[2];
+        else if (color == Color.magenta)
+            this.GetComponent<SpriteRenderer>().sprite = carSprites[6];
+        else if (color == Color.red)
+            this.GetComponent<SpriteRenderer>().sprite = carSprites[8];
+        else if (color == Color.white)
+            this.GetComponent<SpriteRenderer>().sprite = carSprites[9];
+        else if (color == Color.yellow)
+            this.GetComponent<SpriteRenderer>().sprite = carSprites[10];
     }
 
     public void Init()
@@ -254,7 +271,8 @@ public class NetworkCar : NetworkBehaviour {
     public void EnableCar(bool enable)
     {
         GetComponent<Renderer>().enabled = enable;
-        _collider2D.enabled = isServer && enable;
+        _collider2D.enabled = enable;
+        //_collider2D.enabled = isServer && enable;
         //trailGameobject.SetActive(enable);
 
         _canControl = enable;
