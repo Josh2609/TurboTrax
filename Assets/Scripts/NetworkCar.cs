@@ -8,11 +8,11 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class NetworkCar : NetworkBehaviour {
 
-    public float acceleration = 3;
+    public float acceleration = 6f;
     public float maxSpeed = 10.0f;
-    public float speed = 2.0f;
+    public float speed = 10.0f;
     public float turning = 2.0f;
-    public float friction = 3;
+    public float friction = 1f;
     public Vector2 currentSpeed;
 
     public Camera camera;
@@ -39,6 +39,15 @@ public class NetworkCar : NetworkBehaviour {
 
     protected bool _wasInit = false;
 
+    //**
+    public trackLapTrigger first;
+    trackLapTrigger next;
+    float currentLapTime = 0f;
+    float raceTime = 0f;
+    int currentLap = 1;
+    public Text lapCounterUI;
+    //**
+
     void Awake()
     {
         //register the spaceship in the gamemanager, that will allow to loop on it.
@@ -55,7 +64,12 @@ public class NetworkCar : NetworkBehaviour {
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _collider2D = GetComponent<Collider2D>();
-        
+
+        lapCounterUI.text = currentLap + "/" + lapCount;
+        first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
+        SetNextTrigger(first);
+        UpdateText();
+
         Renderer[] rends = GetComponentsInChildren<Renderer>();
         foreach (Renderer r in rends)
             r.material.color = color;
@@ -94,14 +108,8 @@ public class NetworkCar : NetworkBehaviour {
     [ClientCallback]
     void Update()
     {
-        _rotation = 0;
-        _acceleration = 0;
-
         if (!isLocalPlayer || !_canControl)
             return;
-
-        //_rotation = Input.GetAxis("Horizontal");
-        //_acceleration = Input.GetAxis("Vertical");
         // ********** MOVEMENT START **********
         currentSpeed = new Vector2(_rigidbody2D.velocity.x, _rigidbody2D.velocity.y);
 
@@ -181,6 +189,36 @@ public class NetworkCar : NetworkBehaviour {
         }
     }
 
+    void UpdateText()
+    {
+        lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, lapCount);
+    }
+
+    public void OnLapTrigger(trackLapTrigger trigger)
+    {
+        Debug.Log("PlayerName trig = " + playerName);
+        if (trigger == next)
+        {
+            if (first == next)
+            {
+                if (currentLap == lapCount)
+                {
+                    Kill();
+                }
+                currentLap++;
+                currentLapTime = 0f;
+                UpdateText();
+            }
+            SetNextTrigger(next);
+        }
+    }
+
+    void SetNextTrigger(trackLapTrigger trigger)
+    {
+        Debug.Log("TRIGGERED!");
+        next = trigger.next;
+        SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);
+    }
     void CheckExitScreen()
     {
         //if (Camera.main == null)

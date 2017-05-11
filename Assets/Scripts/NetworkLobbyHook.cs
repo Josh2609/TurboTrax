@@ -15,7 +15,7 @@ public class NetworkLobbyHook : LobbyHook {
         car.playerName = lobby.playerName;
         //playerLapCounter.playerName = lobby.playerName;
         car.color = lobby.playerColor;
-        car.lapCount = 3;
+        car.lapCount = 1;
 
 
         //LobbyPlayer lobby = lobbyPlayer.GetComponent<LobbyPlayer>();
