@@ -69,6 +69,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1508172315336406
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4894101329258838}
+  m_Layer: 0
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1575366429670226
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,8 +140,22 @@ Transform:
   m_LocalScale: {x: 0.336192, y: 0.336192, z: 0.336192}
   m_Children:
   - {fileID: 224307074731097688}
+  - {fileID: 4894101329258838}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4894101329258838
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1508172315336406}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalScale: {x: 2.9744911, y: 2.9744911, z: 2.9744911}
+  m_Children: []
+  m_Father: {fileID: 4838312666318996}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20085320024942600
 Camera:
@@ -258,9 +287,10 @@ MonoBehaviour:
   turning: 2
   friction: 3
   currentSpeed: {x: 0, y: 0}
-  camera: {fileID: 20085320024942600}
-  bulletPrefab: {fileID: 1010658369705124, guid: 89bb03bbfc572244eaec94119a96da30,
+  bulletPrefab: {fileID: 1287460028033244, guid: 96f59fef46645de469bf1063ac5b290a,
     type: 2}
+  bulletSpawn: {fileID: 4894101329258838}
+  camera: {fileID: 20085320024942600}
   playerName: player
   color: {r: 0, g: 0, b: 1, a: 1}
   lapCount: 0

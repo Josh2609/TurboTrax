@@ -15,9 +15,13 @@ public class NetworkCar : NetworkBehaviour {
     public float friction = 1f;
     public Vector2 currentSpeed;
 
+    //**
+    public GameObject bulletPrefab;
+    public Transform bulletSpawn;
+    //**
     public Camera camera;
 
-    public GameObject bulletPrefab;
+   // public GameObject bulletPrefab;
 
     [SyncVar]
     public string playerName = "player";
@@ -75,7 +79,7 @@ public class NetworkCar : NetworkBehaviour {
 
         setColor();
 
-
+        ClientScene.RegisterPrefab(bulletPrefab);
         if (NetworkGameManager.sInstance != null)
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
             Init();
@@ -168,9 +172,10 @@ public class NetworkCar : NetworkBehaviour {
         if (Input.GetButton("Jump") && _shootingTimer <= 0)
         {
             _shootingTimer = 0.2f;
+            CmdFireGun();
             //we call a Command, that will be executed only on server, to spawn a new bullet
             //we pass the position&forward to be sure to shoot from the right one (server can lag one frame behind)
-            CmdFire(transform.position, transform.forward, _rigidbody2D.velocity);
+            //CmdFire(transform.position, transform.forward, _rigidbody2D.velocity);
         }
 
         if (_shootingTimer > 0)
@@ -310,6 +315,19 @@ public class NetworkCar : NetworkBehaviour {
         RpcRespawn();
     }
 
+    [Command]
+    void CmdFireGun()
+    {
+        var bullet = (GameObject)Instantiate(
+            bulletPrefab,
+            bulletSpawn.position,
+            bulletSpawn.rotation);
+
+        bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
+        NetworkServer.Spawn(bullet);
+        Destroy(bullet, 2.0f);
+    }
+
     public void CreateBullets()
     {
         //Vector3[] vectorBase = { _rigidbody2D.rotation * Vector3.right, _rigidbody2D.rotation * Vector3.up, _rigidbody2D.rotation * Vector3.forward };
@@ -323,7 +341,7 @@ public class NetworkCar : NetworkBehaviour {
         //    bulletScript.originalDirection = vectorBase[2];
         //    bulletScript.owner = this;
 
-        //    //NetworkServer.SpawnWithClientAuthority(bullet, connectionToClient);
+        //    NetworkServer.SpawnWithClientAuthority(bullet, connectionToClient);
         //}
     }
 
