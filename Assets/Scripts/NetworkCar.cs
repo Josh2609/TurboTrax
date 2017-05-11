@@ -8,10 +8,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class NetworkCar : NetworkBehaviour {
 
-    public float acceleration = 6f;
+    public float acceleration = 5f;
     public float maxSpeed = 10.0f;
     public float speed = 10.0f;
-    public float turning = 2.0f;
+    public float turning = 3.0f;
     public float friction = 1f;
     public Vector2 currentSpeed;
 
@@ -128,40 +128,41 @@ public class NetworkCar : NetworkBehaviour {
         if (!isLocalPlayer || !_canControl)
             return;
         // ********** MOVEMENT START **********
-        currentSpeed = new Vector2(_rigidbody2D.velocity.x, _rigidbody2D.velocity.y);
-
-        if (currentSpeed.magnitude > maxSpeed)
-        {
-            currentSpeed = currentSpeed.normalized;
-            currentSpeed *= maxSpeed;
-        }
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            _rigidbody2D.AddForce(transform.up * acceleration);
-            _rigidbody2D.drag = friction;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            _rigidbody2D.AddForce(-(transform.up) * (acceleration / 2));
-            _rigidbody2D.drag = friction;
-        }
-
-        if (Input.GetKey(KeyCode.A) && currentSpeed.magnitude > 0)
-        {
-            transform.Rotate(Vector3.forward * turning);
-        }
-
-        if (Input.GetKey(KeyCode.D) && currentSpeed.magnitude > 0)
-        {
-            transform.Rotate(Vector3.forward * -turning);
-        }
-
-        if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
-        {
-            _rigidbody2D.drag = friction * 2;
-        }
+       float h = -Input.GetAxis("Horizontal");
+         float v = Input.GetAxis("Vertical");
+ 
+         Vector2 speed = transform.up * (v * acceleration);
+         _rigidbody2D.AddForce(speed);
+ 
+         float direction = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(Vector2.up));
+         if(direction >= 0.0f) {
+             _rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
+             //rb.AddTorque((h * steering) * (rb.velocity.magnitude / 10.0f));
+         } else {
+             _rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
+             //rb.AddTorque((-h * steering) * (rb.velocity.magnitude / 10.0f));
+         }
+ 
+         Vector2 forward = new Vector2(0.0f, 0.5f);
+         float steeringRightAngle;
+         if(_rigidbody2D.angularVelocity > 0) {
+             steeringRightAngle = -90;
+         } else {
+             steeringRightAngle = 90;
+         }
+ 
+         Vector2 rightAngleFromForward = Quaternion.AngleAxis(steeringRightAngle, Vector3.forward) * forward;
+         Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(rightAngleFromForward), Color.green);
+ 
+         float driftForce = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(rightAngleFromForward.normalized));
+ 
+         Vector2 relativeForce = (rightAngleFromForward.normalized * -1.0f) * (driftForce * 10.0f);
+ 
+ 
+         Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(relativeForce), Color.red);
+ 
+         _rigidbody2D.AddForce(_rigidbody2D.GetRelativeVector(relativeForce));
+     
         // ********** MOVEMENT END **********
 
         if (Input.GetButton("Jump") && _shootingTimer <= 0)
@@ -311,12 +312,12 @@ public class NetworkCar : NetworkBehaviour {
 
     public void CreateBullets()
     {
-        //Vector3[] vectorBase = { _rigidbody.rotation * Vector3.right, _rigidbody.rotation * Vector3.up, _rigidbody.rotation * Vector3.forward };
+        //Vector3[] vectorBase = { _rigidbody2D.rotation * Vector3.right, _rigidbody2D.rotation * Vector3.up, _rigidbody2D.rotation * Vector3.forward };
         //Vector3[] offsets = { -1.5f * vectorBase[0] + -0.5f * vectorBase[2], 1.5f * vectorBase[0] + -0.5f * vectorBase[2] };
 
         //for (int i = 0; i < 2; ++i)
         //{
-        //    GameObject bullet = Instantiate(bulletPrefab, _rigidbody.position + offsets[i], Quaternion.identity) as GameObject;
+        //    GameObject bullet = Instantiate(bulletPrefab, _rigidbody2D.position + offsets[i], Quaternion.identity) as GameObject;
         //    NetworkCarBullet bulletScript = bullet.GetComponent<NetworkCarBullet>();
 
         //    bulletScript.originalDirection = vectorBase[2];
