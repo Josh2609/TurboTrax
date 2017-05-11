@@ -9,9 +9,9 @@ using UnityEngine.UI;
 public class NetworkCar : NetworkBehaviour {
 
     public float acceleration = 5f;
-    public float maxSpeed = 10.0f;
-    public float speed = 10.0f;
-    public float turning = 3.0f;
+    public float maxSpeed = 7.0f;
+    public float speed = 7.0f;
+    public float turning = 5.0f;
     public float friction = 1f;
     public Vector2 currentSpeed;
 
@@ -141,10 +141,10 @@ public class NetworkCar : NetworkBehaviour {
          float direction = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(Vector2.up));
          if(direction >= 0.0f) {
              _rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
-             //rb.AddTorque((h * steering) * (rb.velocity.magnitude / 10.0f));
+             _rigidbody2D.AddTorque((h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
          } else {
              _rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
-             //rb.AddTorque((-h * steering) * (rb.velocity.magnitude / 10.0f));
+             _rigidbody2D.AddTorque((-h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
          }
  
          Vector2 forward = new Vector2(0.0f, 0.5f);

@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4794398721246182}
   - component: {fileID: 61829686494252214}
+  - component: {fileID: 114850142818989704}
   m_Layer: 0
   m_Name: checkpoint2
   m_TagString: Untagged
@@ -36,6 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4835962484416652}
   - component: {fileID: 61526658125055452}
+  - component: {fileID: 114079770263904608}
   m_Layer: 0
   m_Name: checkpoint5
   m_TagString: Untagged
@@ -52,6 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4309984870861922}
   - component: {fileID: 61759986369239670}
+  - component: {fileID: 114609879742900298}
   m_Layer: 0
   m_Name: StartFinish
   m_TagString: Untagged
@@ -68,6 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4670851441482044}
   - component: {fileID: 61535942446218076}
+  - component: {fileID: 114548356864092990}
   m_Layer: 0
   m_Name: checkpoint10
   m_TagString: Untagged
@@ -84,6 +88,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4115966439859768}
   - component: {fileID: 61624936193224492}
+  - component: {fileID: 114084079972727356}
   m_Layer: 0
   m_Name: checkpoint6
   m_TagString: Untagged
@@ -102,7 +107,6 @@ GameObject:
   - component: {fileID: 212966662513417590}
   - component: {fileID: 68711897271699770}
   - component: {fileID: 68917370751706048}
-  - component: {fileID: 114283631697239494}
   m_Layer: 0
   m_Name: Level1
   m_TagString: Untagged
@@ -119,6 +123,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4147111584943528}
   - component: {fileID: 61800692676707408}
+  - component: {fileID: 114440564407696362}
   m_Layer: 0
   m_Name: checkpoint9
   m_TagString: Untagged
@@ -135,6 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4462368286576940}
   - component: {fileID: 61749447244409248}
+  - component: {fileID: 114359243211854158}
   m_Layer: 0
   m_Name: checkpoint4
   m_TagString: Untagged
@@ -151,6 +157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4399090893106884}
   - component: {fileID: 61223081844678284}
+  - component: {fileID: 114007512345969678}
   m_Layer: 0
   m_Name: checkpoint3
   m_TagString: Untagged
@@ -167,6 +174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4865854820556358}
   - component: {fileID: 61676449846669898}
+  - component: {fileID: 114804909481943756}
   m_Layer: 0
   m_Name: checkpoint1
   m_TagString: Untagged
@@ -183,6 +191,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4931876728758446}
   - component: {fileID: 61395749120859372}
+  - component: {fileID: 114065161249425084}
   m_Layer: 0
   m_Name: checkpoint8
   m_TagString: Untagged
@@ -199,6 +208,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4081785785991924}
   - component: {fileID: 61330265730929760}
+  - component: {fileID: 114206896640273572}
   m_Layer: 0
   m_Name: checkpoint11
   m_TagString: Untagged
@@ -215,6 +225,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4447984419730218}
   - component: {fileID: 61398922997830882}
+  - component: {fileID: 114215586596223268}
   m_Layer: 0
   m_Name: checkpoint7
   m_TagString: Untagged
@@ -748,19 +759,150 @@ EdgeCollider2D:
   - {x: -7.495071, y: 4.731824}
   - {x: -7.0393467, y: 4.7328715}
   - {x: -1.1796409, y: 4.7315288}
---- !u!114 &114283631697239494
+--- !u!114 &114007512345969678
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1432275715082416}
+  m_GameObject: {fileID: 1573585763794708}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d75c8fccc68e1ba4bb27d0d82dcc6ef3, type: 3}
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortingLayerName: Default
-  SortingOrder: 1
+  next: {fileID: 114359243211854158}
+--- !u!114 &114065161249425084
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1708742355400794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114440564407696362}
+--- !u!114 &114079770263904608
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1211029880345276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114084079972727356}
+--- !u!114 &114084079972727356
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1344656659961364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114215586596223268}
+--- !u!114 &114206896640273572
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1796174687539706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114609879742900298}
+--- !u!114 &114215586596223268
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1989700217525236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114065161249425084}
+--- !u!114 &114359243211854158
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1512210417312808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114079770263904608}
+--- !u!114 &114440564407696362
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1489935507495726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114548356864092990}
+--- !u!114 &114548356864092990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1230677262322822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114206896640273572}
+--- !u!114 &114609879742900298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1218146086410136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114804909481943756}
+--- !u!114 &114804909481943756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1615393946854366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114850142818989704}
+--- !u!114 &114850142818989704
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1123446258795412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3f9afbbefc4d1441989bdaabd4e74b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  next: {fileID: 114007512345969678}
 --- !u!212 &212966662513417590
 SpriteRenderer:
   m_ObjectHideFlags: 1
