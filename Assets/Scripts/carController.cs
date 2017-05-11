@@ -12,7 +12,7 @@ public class carController : NetworkBehaviour{
     public string playerName = "player";
 
     [SyncVar]
-    public Color playerColor = Color.blue;
+    public Color color = Color.blue;
 
 
     //**
@@ -84,19 +84,19 @@ public class carController : NetworkBehaviour{
 
     void setColor()
     {
-        if (playerColor == Color.blue)
+        if (color == Color.blue)
             this.GetComponent<SpriteRenderer>().sprite = carSprites[0];
-        else if (playerColor == Color.cyan)
+        else if (color == Color.cyan)
             this.GetComponent<SpriteRenderer>().sprite = carSprites[1];
-        else if (playerColor == Color.green)
+        else if (color == Color.green)
             this.GetComponent<SpriteRenderer>().sprite = carSprites[2];
-        else if (playerColor == Color.magenta)
+        else if (color == Color.magenta)
             this.GetComponent<SpriteRenderer>().sprite = carSprites[6];
-        else if (playerColor == Color.red)
+        else if (color == Color.red)
             this.GetComponent<SpriteRenderer>().sprite = carSprites[8];
-        else if (playerColor == Color.white)
+        else if (color == Color.white)
             this.GetComponent<SpriteRenderer>().sprite = carSprites[9];
-        else if (playerColor == Color.yellow)
+        else if (color == Color.yellow)
             this.GetComponent<SpriteRenderer>().sprite = carSprites[10];
     }
 
@@ -211,6 +211,10 @@ public class carController : NetworkBehaviour{
 
     void SetNextTrigger(trackLapTrigger trigger)
     {
+        //if(isServer)
+        {
+            //loadScene.nextScene("MPFinish");
+        }
         Debug.Log("TRIGGERED!");
         next = trigger.next;
         SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);

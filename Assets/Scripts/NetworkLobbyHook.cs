@@ -7,12 +7,23 @@ public class NetworkLobbyHook : LobbyHook {
 
     public override void OnLobbyServerSceneLoadedForPlayer(UnityEngine.Networking.NetworkManager manager, GameObject lobbyPlayer, GameObject gamePlayer)
     {
+
         LobbyPlayer lobby = lobbyPlayer.GetComponent<LobbyPlayer>();
-        carController localPlayer = gamePlayer.GetComponent<carController>();
+        NetworkCar car = gamePlayer.GetComponent<NetworkCar>();
         lapCounter playerLapCounter = gamePlayer.GetComponent<lapCounter>();
 
-        localPlayer.playerName = lobby.playerName;
+        car.playerName = lobby.playerName;
         //playerLapCounter.playerName = lobby.playerName;
-        localPlayer.playerColor = lobby.playerColor;
+        car.color = lobby.playerColor;
+        car.lapCount = 3;
+
+
+        //LobbyPlayer lobby = lobbyPlayer.GetComponent<LobbyPlayer>();
+        //carController localPlayer = gamePlayer.GetComponent<carController>();
+        //lapCounter playerLapCounter = gamePlayer.GetComponent<lapCounter>();
+
+        //localPlayer.playerName = lobby.playerName;
+        ////playerLapCounter.playerName = lobby.playerName;
+        //localPlayer.playerColor = lobby.playerColor;
     }
 }
