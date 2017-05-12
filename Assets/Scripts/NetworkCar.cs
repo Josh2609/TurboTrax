@@ -22,6 +22,8 @@ public class NetworkCar : NetworkBehaviour {
     //**
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
+    public GameObject minePrefab;
+    public Transform mineSpawn;
     //**
     public Camera camera;
 
@@ -88,6 +90,7 @@ public class NetworkCar : NetworkBehaviour {
         setColor();
         //Leaderboard.enabled = false;
         ClientScene.RegisterPrefab(bulletPrefab);
+        ClientScene.RegisterPrefab(minePrefab);
         if (NetworkGameManager.sInstance != null)
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
             Init();
@@ -179,7 +182,7 @@ public class NetworkCar : NetworkBehaviour {
 
          if (Input.GetKeyDown(KeyCode.G))
          {
-             powerUp = 2;//setPowerUp();
+             powerUp = 1;//setPowerUp();
              Debug.Log("Powerup Update == " + powerUp);
          }
 
@@ -281,7 +284,10 @@ public class NetworkCar : NetworkBehaviour {
                 _shootingTimer -= Time.deltaTime;
         } else if (powerUp == 1)
         {
-
+            CmdDropMine();
+            powerUp = -1;
+            _powerUpTimer = 8.0f;
+            return powerUp;
         }
         return powerUp;
     }
@@ -406,6 +412,18 @@ public class NetworkCar : NetworkBehaviour {
         bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 2.0f);
+    }
+
+    [Command]
+    void CmdDropMine()
+    {
+        var mine = (GameObject)Instantiate(
+            minePrefab,
+            mineSpawn.position,
+            mineSpawn.rotation);
+
+        NetworkServer.Spawn(mine);
+        //Destroy(mine, 2.0f);
     }
 
     public void CreateBullets()
