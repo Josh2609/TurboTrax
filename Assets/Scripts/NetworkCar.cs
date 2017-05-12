@@ -16,7 +16,8 @@ public class NetworkCar : NetworkBehaviour {
     public Vector2 currentSpeed;
 
     public Text Leaderboard;
-
+    static int powerUp;
+    float _powerUpTimer;
 
     //**
     public GameObject bulletPrefab;
@@ -47,6 +48,7 @@ public class NetworkCar : NetworkBehaviour {
     protected bool _wasInit = false;
 
     //**
+    int bullets;
     public trackLapTrigger first;
     trackLapTrigger next;
     float currentLapTime = 0f;
@@ -73,6 +75,8 @@ public class NetworkCar : NetworkBehaviour {
 
     void Start()
     {
+        powerUp = -1;
+        _powerUpTimer = 8.0f;
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _collider2D = GetComponent<Collider2D>();
 
@@ -82,7 +86,7 @@ public class NetworkCar : NetworkBehaviour {
         UpdateText();
 
         setColor();
-        Leaderboard.enabled = false;
+        //Leaderboard.enabled = false;
         ClientScene.RegisterPrefab(bulletPrefab);
         if (NetworkGameManager.sInstance != null)
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
@@ -136,8 +140,8 @@ public class NetworkCar : NetworkBehaviour {
         if (!isLocalPlayer || !_canControl)
             return;
         // ********** MOVEMENT START **********
-       float h = -Input.GetAxis("Horizontal");
-         float v = Input.GetAxis("Vertical");
+        float h = -Input.GetAxis("Horizontal");
+        float v = Input.GetAxis("Vertical");
  
          Vector2 speed = transform.up * (v * acceleration);
          _rigidbody2D.AddForce(speed);
@@ -173,17 +177,31 @@ public class NetworkCar : NetworkBehaviour {
      
         // ********** MOVEMENT END **********
 
-        if (Input.GetButton("Jump") && _shootingTimer <= 0)
+         if (Input.GetKeyDown(KeyCode.G))
+         {
+             powerUp = 1;//setPowerUp();
+             Debug.Log("Powerup Update == " + powerUp);
+         }
+
+         if (Input.GetKeyDown(KeyCode.H))
+         {
+             powerUp = -1;//setPowerUp();
+             _powerUpTimer = 0.0f;
+         }
+        if (powerUp == -1 && _powerUpTimer <= 0.0f)
         {
-            _shootingTimer = 0.2f;
-            CmdFireGun();
-            //we call a Command, that will be executed only on server, to spawn a new bullet
-            //we pass the position&forward to be sure to shoot from the right one (server can lag one frame behind)
-            //CmdFire(transform.position, transform.forward, _rigidbody2D.velocity);
+            powerUp = setPowerUp();
+        } else if(powerUp >= 0 && powerUp <= 7)
+        {
+            if (Input.GetButton("Jump"))
+            {
+                powerUp = usePowerUp(powerUp);
+            }
+        } else if (_powerUpTimer > 0.0f)
+        {
+            _powerUpTimer -= Time.deltaTime;
         }
 
-        if (_shootingTimer > 0)
-            _shootingTimer -= Time.deltaTime;
     }
 
     [ClientCallback]
@@ -221,6 +239,50 @@ public class NetworkCar : NetworkBehaviour {
         lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, lapCount);
     }
 
+    public int setPowerUp()
+    {
+        /* Randomly generated number corresponds to certain power up
+         * 0 = guns(50 ammo?)
+         * 1 = mine
+         * 2 = temp (how long?) speed boost
+         * 3 = health refill
+         * 4 = missile (instant kill)
+         * 5 = tacks? speed debuff for car hit
+         * 6 = armor?
+         */
+        int randomNumber = 0;//Random.Range(0, 7);
+        Debug.Log("Powerup == " + randomNumber);
+        if (randomNumber == 0)
+        {
+            bullets = 10;
+        }
+        return randomNumber;
+    }
+
+    public int usePowerUp(int powerUp)
+    {
+        if (powerUp == 0)
+        {
+            if (_shootingTimer <= 0 && bullets > 0)
+            {
+                _shootingTimer = 0.2f;
+                CmdFireGun();
+                bullets--;
+                Debug.Log("Bullets == " + bullets);
+            }else if (bullets <= 0)
+            {
+                Debug.Log("Bullets 000");
+                powerUp = -1;
+                _powerUpTimer = 8.0f;
+                Debug.Log("powerUp in bullets == " + powerUp);
+                return powerUp;
+            }
+            if (_shootingTimer > 0)
+                _shootingTimer -= Time.deltaTime;
+        }
+        return powerUp;
+    }
+
     public void OnLapTrigger(trackLapTrigger trigger)
     {
         Debug.Log("PlayerName trig = " + playerName);
@@ -230,14 +292,16 @@ public class NetworkCar : NetworkBehaviour {
             {
                 if (currentLap == lapCount)
                 {
-                    for (int i = 0; i < NetworkGameManager.PlayerRanks.Count; i++ )
+                    MPFinish.finishPositions.Add(playerName);
+                    for (int i = 0; i < MPFinish.finishPositions.Count; i++)
                     {
-                        Leaderboard.text += "\nDicks: " + NetworkGameManager.PlayerRanks[i];
+                        Debug.Log("Finished " + i + " " + MPFinish.finishPositions[i]);
+                        //Leaderboard.text += "\nDicks: " + NetworkGameManager.PlayerRanks[i];
                     }
-                    Leaderboard.text += "\nDicks:" + playerName;
-                    Leaderboard.enabled = true;
-                    NetworkGameManager.PlayerRanks.Add(playerName);
-                    Debug.Log("Dongers: " + NetworkGameManager.PlayerRanks.Count);
+                    //Leaderboard.text += "\nDicks:" + playerName;
+                    //Leaderboard.enabled = true;
+                    //NetworkGameManager.PlayerRanks.Add(playerName);
+                    //Debug.Log("Dongers: " + NetworkGameManager.PlayerRanks.Count);
                     Kill();
                 }
                 currentLap++;
@@ -254,6 +318,7 @@ public class NetworkCar : NetworkBehaviour {
         next = trigger.next;
         SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);
     }
+
     void CheckExitScreen()
     {
         //if (Camera.main == null)

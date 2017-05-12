@@ -49,7 +49,7 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (allDestroyed)
         {
-           
+            displayRanks();
             StartCoroutine(ReturnToLobby());
         }
     }
@@ -63,7 +63,12 @@ public class NetworkGameManager : NetworkBehaviour
 
     public void displayRanks()
     {
-        Leaderboard.text = "1st " + PlayerRanks[0];
+        Leaderboard = (Text)GameObject.Find("Leaderboard").GetComponent(typeof(Text));
+        for (int i = 0; i < MPFinish.finishPositions.Count; i++)
+        {
+            Debug.Log("ヽ༼ຈل͜ຈ༽ﾉ raise your dongers: " + MPFinish.finishPositions.Count);
+            Leaderboard.text += "1st " + MPFinish.finishPositions[i];
+        }
     }
 
     IEnumerator ReturnToLobby()

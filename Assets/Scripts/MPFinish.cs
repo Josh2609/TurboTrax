@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 public class MPFinish : NetworkBehaviour {
 
-    static List<string> finishPositions = new List<string>();
+    public static List<string> finishPositions = new List<string>();
     static List<string> playerList = new List<string>();
 
     public static void playerFinished(string playerName)
