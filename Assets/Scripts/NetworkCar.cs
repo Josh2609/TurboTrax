@@ -179,7 +179,7 @@ public class NetworkCar : NetworkBehaviour {
 
          if (Input.GetKeyDown(KeyCode.G))
          {
-             powerUp = 1;//setPowerUp();
+             powerUp = 2;//setPowerUp();
              Debug.Log("Powerup Update == " + powerUp);
          }
 
@@ -261,7 +261,7 @@ public class NetworkCar : NetworkBehaviour {
 
     public int usePowerUp(int powerUp)
     {
-        if (powerUp == 0)
+        if (powerUp == 0) // * Shooting
         {
             if (_shootingTimer <= 0 && bullets > 0)
             {
@@ -279,6 +279,9 @@ public class NetworkCar : NetworkBehaviour {
             }
             if (_shootingTimer > 0)
                 _shootingTimer -= Time.deltaTime;
+        } else if (powerUp == 1)
+        {
+
         }
         return powerUp;
     }
