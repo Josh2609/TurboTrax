@@ -182,6 +182,11 @@ public class NetworkCar : NetworkBehaviour {
 
          if (Input.GetKeyDown(KeyCode.G))
          {
+             powerUp = 2;//setPowerUp();
+             Debug.Log("Powerup Update == " + powerUp);
+         }
+         if (Input.GetKeyDown(KeyCode.Y))
+         {
              powerUp = 1;//setPowerUp();
              Debug.Log("Powerup Update == " + powerUp);
          }
@@ -247,8 +252,8 @@ public class NetworkCar : NetworkBehaviour {
         /* Randomly generated number corresponds to certain power up
          * 0 = guns(50 ammo?)
          * 1 = mine
-         * 2 = temp (how long?) speed boost
-         * 3 = health refill
+         * 2 = health refill
+         * 3 = temp (how long?) speed boost
          * 4 = missile (instant kill)
          * 5 = tacks? speed debuff for car hit
          * 6 = armor?
@@ -285,6 +290,13 @@ public class NetworkCar : NetworkBehaviour {
         } else if (powerUp == 1)
         {
             CmdDropMine();
+            powerUp = -1;
+            _powerUpTimer = 8.0f;
+            return powerUp;
+        } else if (powerUp == 2)
+        {
+            Debug.Log("RefillHealth");
+            CmdRefillHealth();
             powerUp = -1;
             _powerUpTimer = 8.0f;
             return powerUp;
@@ -399,6 +411,13 @@ public class NetworkCar : NetworkBehaviour {
     {
         EnableCar(true);
         RpcRespawn();
+    }
+
+    [Command]
+    void CmdRefillHealth()
+    {
+        var health = this.GetComponent<Health>();
+        health.refillHealth();
     }
 
     [Command]

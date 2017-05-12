@@ -27,8 +27,18 @@ public class Health : NetworkBehaviour {
         }
     }
 
+    public void refillHealth()
+    {
+        Debug.Log("Health.RefillHealth");
+        if (!isServer)
+            return;
+        currentHealth = maxHealth;
+    }
+
     void OnChangeHealth(int health)
     {
         healthBar.sizeDelta = new Vector2(health, healthBar.sizeDelta.y);
     }
+
+    
 }
