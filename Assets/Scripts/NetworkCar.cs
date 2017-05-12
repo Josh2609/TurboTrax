@@ -11,7 +11,7 @@ public class NetworkCar : NetworkBehaviour {
     public float acceleration = 5f;
     public float maxSpeed = 7.0f;
     public float speed = 7.0f;
-    public float turning = 5.0f;
+    public float turning = 3.0f;
     public float friction = 1f;
     public Vector2 currentSpeed;
 
@@ -297,7 +297,7 @@ public class NetworkCar : NetworkBehaviour {
     public void Kill()
     {
         lapCount -= 1;
-
+        NetworkGameManager.PlayerRanks.Add(playerName);
         RpcDestroyed();
         EnableCar(false);
 

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Prototype.NetworkLobby;
+using UnityEngine.UI;
 
 
 public class NetworkGameManager : NetworkBehaviour
 {
     static public List<NetworkCar> sCars = new List<NetworkCar>();
+    static public List<string> PlayerRanks = new List<string>();
     static public NetworkGameManager sInstance = null;
 
     public GameObject uiScoreZone;
@@ -54,10 +56,18 @@ public class NetworkGameManager : NetworkBehaviour
         base.OnStartClient();
     }
 
+    public Text Leaderboard;
+
+    public void displayRanks()
+    {
+        Leaderboard.text = "1st " + PlayerRanks[0];
+    }
+
     IEnumerator ReturnToLobby()
     {
+        displayRanks();
         _running = false;
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(5.0f);
         LobbyManager.s_Singleton.ServerReturnToLobby();
     }
 
