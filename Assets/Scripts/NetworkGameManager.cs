@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class NetworkGameManager : NetworkBehaviour
 {
     static public List<NetworkCar> sCars = new List<NetworkCar>();
+
+    //[SyncVar]
     static public List<string> PlayerRanks = new List<string>();
     static public NetworkGameManager sInstance = null;
 
@@ -47,6 +49,7 @@ public class NetworkGameManager : NetworkBehaviour
 
         if (allDestroyed)
         {
+           
             StartCoroutine(ReturnToLobby());
         }
     }
@@ -65,7 +68,6 @@ public class NetworkGameManager : NetworkBehaviour
 
     IEnumerator ReturnToLobby()
     {
-        displayRanks();
         _running = false;
         yield return new WaitForSeconds(5.0f);
         LobbyManager.s_Singleton.ServerReturnToLobby();

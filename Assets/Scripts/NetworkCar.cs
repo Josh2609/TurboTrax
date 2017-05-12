@@ -15,6 +15,9 @@ public class NetworkCar : NetworkBehaviour {
     public float friction = 1f;
     public Vector2 currentSpeed;
 
+    public Text Leaderboard;
+
+
     //**
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
@@ -60,6 +63,7 @@ public class NetworkCar : NetworkBehaviour {
         carSprites = Resources.LoadAll<Sprite>("Car");
         NetworkGameManager.sCars.Add(this);
         camera.enabled = false;
+        Leaderboard = (Text)GameObject.Find("Leaderboard").GetComponent(typeof(Text));
     }
     
     public override void OnStartLocalPlayer()
@@ -78,7 +82,7 @@ public class NetworkCar : NetworkBehaviour {
         UpdateText();
 
         setColor();
-
+        Leaderboard.enabled = false;
         ClientScene.RegisterPrefab(bulletPrefab);
         if (NetworkGameManager.sInstance != null)
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
@@ -226,6 +230,14 @@ public class NetworkCar : NetworkBehaviour {
             {
                 if (currentLap == lapCount)
                 {
+                    for (int i = 0; i < NetworkGameManager.PlayerRanks.Count; i++ )
+                    {
+                        Leaderboard.text += "\nDicks: " + NetworkGameManager.PlayerRanks[i];
+                    }
+                    Leaderboard.text += "\nDicks:" + playerName;
+                    Leaderboard.enabled = true;
+                    NetworkGameManager.PlayerRanks.Add(playerName);
+                    Debug.Log("Dongers: " + NetworkGameManager.PlayerRanks.Count);
                     Kill();
                 }
                 currentLap++;
@@ -297,7 +309,7 @@ public class NetworkCar : NetworkBehaviour {
     public void Kill()
     {
         lapCount -= 1;
-        NetworkGameManager.PlayerRanks.Add(playerName);
+        
         RpcDestroyed();
         EnableCar(false);
 
