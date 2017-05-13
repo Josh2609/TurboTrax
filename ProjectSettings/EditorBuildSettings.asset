@@ -10,4 +10,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/NetworkSpaceship.unity
   - enabled: 1
+    path: Assets/Scenes/SelectTrack.unity
+  - enabled: 1
     path: Assets/Scenes/mLevel1.unity

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class loadScene : MonoBehaviour {
 
-    public static void nextScene(string scene)
+    public void nextScene(string scene)
     {
         lapCounter.maxLaps = 5;
         SceneManager.LoadScene(scene);

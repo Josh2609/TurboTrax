@@ -52,7 +52,7 @@ namespace Prototype.NetworkLobby
         protected ulong _currentMatchID;
 
         protected LobbyHook _lobbyHooks;
-
+        int trackCounter;
         void Start()
         {
             s_Singleton = this;
@@ -63,8 +63,35 @@ namespace Prototype.NetworkLobby
             GetComponent<Canvas>().enabled = true;
 
             DontDestroyOnLoad(gameObject);
-
+            trackCounter = 2;
             SetServerInfo("Offline", "None");
+        }
+
+        Sprite trackSprite;
+         
+        public void OnTrackClicked()
+        {
+           
+            TrackChange();
+        }
+
+        public void TrackChange()
+        {
+            string trackToLoad = "Level" + trackCounter;
+            Debug.Log("TrackToLoad = " + trackToLoad);
+            trackSprite = Resources.Load<Sprite>(trackToLoad);//put tracks here
+
+            var lobbyManager = this.GetComponent<NetworkLobbyManager>();
+            var trackImage = (Image)GameObject.Find("TrackSelect").GetComponent(typeof(Image));
+            trackImage.overrideSprite = trackSprite;
+
+            lobbyManager.playScene = trackToLoad;
+
+            trackCounter++;
+            if (trackCounter > 2)
+            {
+                trackCounter = 1;
+            }
         }
 
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
