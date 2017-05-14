@@ -10,8 +10,10 @@ public class NetworkGameManager : NetworkBehaviour
 {
     static public List<NetworkCar> sCars = new List<NetworkCar>();
 
-    //[SyncVar]
+   // [SyncListString]
     static public List<string> PlayerRanks = new List<string>();
+    static public List<string> PlayerNames = new List<string>();
+    static public List<string> RPCRanks = new List<string>();
     static public NetworkGameManager sInstance = null;
 
     public GameObject uiScoreZone;

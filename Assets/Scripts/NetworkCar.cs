@@ -49,6 +49,7 @@ public class NetworkCar : NetworkBehaviour {
 
     protected bool _wasInit = false;
 
+    bool finished = false;
     //**
     int bullets;
     public trackLapTrigger first;
@@ -66,8 +67,10 @@ public class NetworkCar : NetworkBehaviour {
         //register the spaceship in the gamemanager, that will allow to loop on it.
         carSprites = Resources.LoadAll<Sprite>("Car");
         NetworkGameManager.sCars.Add(this);
+        
         camera.enabled = false;
         Leaderboard = (Text)GameObject.Find("Leaderboard").GetComponent(typeof(Text));
+       
     }
     
     public override void OnStartLocalPlayer()
@@ -140,6 +143,17 @@ public class NetworkCar : NetworkBehaviour {
     [ClientCallback]
     void Update()
     {
+        //if (!NetworkGameManager.PlayerNames.Contains(playerName))
+        //{
+
+        //    NetworkGameManager.PlayerNames.Add(playerName);
+        //}
+        //Leaderboard.text = "";
+        //for (int i = 0; i < NetworkGameManager.PlayerNames.Count; i++)
+        //{
+        //    Leaderboard.text += i + ": " + NetworkGameManager.PlayerNames[i] + "\n";
+        //}
+
         if (!isLocalPlayer || !_canControl)
             return;
         // ********** MOVEMENT START **********
@@ -151,10 +165,10 @@ public class NetworkCar : NetworkBehaviour {
  
          float direction = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(Vector2.up));
          if(direction >= 0.0f) {
-             _rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
+             //_rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
              _rigidbody2D.AddTorque((h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
          } else {
-             _rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
+             //_rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
              _rigidbody2D.AddTorque((-h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
          }
  
@@ -217,29 +231,6 @@ public class NetworkCar : NetworkBehaviour {
     {
         if (!hasAuthority)
             return;
-
-        if (!_canControl)
-        {//if we can't control, mean we're destroyed, so make sure the ship stay in spawn place
-            //_rigidbody.rotation = Quaternion.identity;
-            //_rigidbody.position = Vector3.zero;
-            //_rigidbody.velocity = Vector3.zero;
-            //_rigidbody.angularVelocity = Vector3.zero;
-        }
-        else
-        {
-            //Quaternion rotation = _rigidbody.rotation * Quaternion.Euler(0, _rotation * turning * Time.fixedDeltaTime, 0);
-            //_rigidbody.MoveRotation(rotation);
-
-            //_rigidbody.AddForce((rotation * Vector3.forward) * _acceleration * 1000.0f * /*?*/speed * Time.deltaTime);
-
-            //if (_rigidbody.velocity.magnitude > maxSpeed * 1000.0f)
-            //{
-              //  _rigidbody.velocity = _rigidbody.velocity.normalized * maxSpeed * 1000.0f;
-            //}
-
-
-            CheckExitScreen();
-        }
     }
 
     void UpdateText()
@@ -264,6 +255,8 @@ public class NetworkCar : NetworkBehaviour {
         {
             bullets = 10;
         }
+        NetworkGameManager.PlayerNames.Add("Num = " + randomNumber);
+
         return randomNumber;
     }
 
@@ -304,21 +297,25 @@ public class NetworkCar : NetworkBehaviour {
         return powerUp;
     }
 
+    public string lastCheckpoint;
     public void OnLapTrigger(trackLapTrigger trigger)
     {
         Debug.Log("PlayerName trig = " + playerName);
         if (trigger == next)
         {
+            lastCheckpoint = trigger.getCheckpointName();
             if (first == next)
             {
                 if (currentLap == lapCount)
                 {
-                    MPFinish.finishPositions.Add(playerName);
-                    for (int i = 0; i < MPFinish.finishPositions.Count; i++)
-                    {
-                        Debug.Log("Finished " + i + " " + MPFinish.finishPositions[i]);
+                    finished = true;
+                    //NetworkGameManager.PlayerRanks.Add(playerName);
+                    //MPFinish.finishPositions.Add(playerName);
+                    //for (int i = 0; i < MPFinish.finishPositions.Count; i++)
+                    //{
+                     //   Debug.Log("Finished " + i + " " + MPFinish.finishPositions[i]);
                         //Leaderboard.text += "\nDicks: " + NetworkGameManager.PlayerRanks[i];
-                    }
+                   // }
                     //Leaderboard.text += "\nDicks:" + playerName;
                     //Leaderboard.enabled = true;
                     //NetworkGameManager.PlayerRanks.Add(playerName);
@@ -340,23 +337,6 @@ public class NetworkCar : NetworkBehaviour {
         SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);
     }
 
-    void CheckExitScreen()
-    {
-        //if (Camera.main == null)
-        //    return;
-
-        //if (Mathf.Abs(_rigidbody.position.x) > Camera.main.orthographicSize * Camera.main.aspect)
-        //{
-        //    _rigidbody.position = new Vector3(-Mathf.Sign(_rigidbody.position.x) * Camera.main.orthographicSize * Camera.main.aspect, 0, _rigidbody.position.z);
-        //    _rigidbody.position -= _rigidbody.position.normalized * 0.1f; // offset a little bit to avoid looping back & forth between the 2 edges 
-        //}
-
-        //if (Mathf.Abs(_rigidbody.position.z) > Camera.main.orthographicSize)
-        //{
-        //    _rigidbody.position = new Vector3(_rigidbody.position.x, _rigidbody.position.y, -Mathf.Sign(_rigidbody.position.z) * Camera.main.orthographicSize);
-        //    _rigidbody.position -= _rigidbody.position.normalized * 0.1f; // offset a little bit to avoid looping back & forth between the 2 edges 
-        //}
-    }
 
     void OnLapChanged(int newValue)
     {
@@ -445,6 +425,13 @@ public class NetworkCar : NetworkBehaviour {
         //Destroy(mine, 2.0f);
     }
 
+    [Command]
+    void CmdSpeedBoost()
+    {
+        //Destroy(mine, 2.0f);
+    }
+
+
     public void CreateBullets()
     {
         //Vector3[] vectorBase = { _rigidbody2D.rotation * Vector3.right, _rigidbody2D.rotation * Vector3.up, _rigidbody2D.rotation * Vector3.forward };
@@ -486,6 +473,7 @@ public class NetworkCar : NetworkBehaviour {
     [ClientRpc]
     void RpcRespawn()
     {
-        EnableCar(true);
+        //this.transform.rotation = lastCheckpoint.transform.rotation;
+        //EnableCar(true);
     }
 }

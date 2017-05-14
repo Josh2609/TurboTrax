@@ -17,4 +17,8 @@ public class trackLapTrigger : MonoBehaviour {
             car.OnLapTrigger(this);
         }
     }
+    public string getCheckpointName()
+    {
+        return gameObject.name;
+    }
 }

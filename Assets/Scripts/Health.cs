@@ -9,6 +9,8 @@ public class Health : NetworkBehaviour {
 
     public const int maxHealth = 100;
 
+    public static bool dead = false;
+
     [SyncVar(hook = "OnChangeHealth")]
     public int currentHealth = maxHealth;
 
@@ -22,8 +24,8 @@ public class Health : NetworkBehaviour {
         currentHealth -= amount;
         if (currentHealth <= 0)
         {
-            currentHealth = 0;
-            Debug.Log("rekt!");
+            currentHealth = maxHealth;
+            RpcRespawn();
         }
     }
 
@@ -40,5 +42,18 @@ public class Health : NetworkBehaviour {
         healthBar.sizeDelta = new Vector2(health, healthBar.sizeDelta.y);
     }
 
+    [ClientRpc]
+    void RpcRespawn()
+    {
+        if (isLocalPlayer)
+        {
+            // move back to zero location
+            NetworkCar car = gameObject.GetComponent<NetworkCar>();
+            Transform checkpoint = (Transform)GameObject.Find(car.lastCheckpoint).GetComponent(typeof(Transform));
+            transform.rotation = checkpoint.rotation;
+            transform.position = new Vector3(checkpoint.transform.position.x, checkpoint.transform.position.y, 0);
+            //transform.position = Vector3.zero;
+        }
+    }
     
 }
