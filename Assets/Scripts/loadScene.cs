@@ -9,5 +9,7 @@ public class loadScene : MonoBehaviour {
     {
         lapCounter.maxLaps = 5;
         SceneManager.LoadScene(scene);
+        if (scene == "MainMenu")
+            Destroy(GameObject.Find("LobbyManager"));
     }
 }
