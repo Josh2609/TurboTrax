@@ -424,10 +424,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1568678259 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 155310, guid: c0978251ff7b10d4fb954a4b56acd9f0, type: 2}
+--- !u!114 &1568678262 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11475086, guid: c0978251ff7b10d4fb954a4b56acd9f0,
+    type: 2}
   m_PrefabInternal: {fileID: 1517214951}
+  m_Script: {fileID: 11500000, guid: 38de513803c5e60498ad31fbc327b120, type: 3}
 --- !u!1 &1894566924
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,7 +444,7 @@ GameObject:
   - component: {fileID: 1894566930}
   - component: {fileID: 1894566929}
   m_Layer: 5
-  m_Name: Image
+  m_Name: TrackSelect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -505,8 +507,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1568678259}
-        m_MethodName: 
+      - m_Target: {fileID: 1568678262}
+        m_MethodName: OnTrackClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

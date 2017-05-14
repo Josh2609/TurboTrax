@@ -254,7 +254,7 @@ public class NetworkCar : NetworkBehaviour {
          * 1 = mine
          * 2 = health refill
          * 3 = temp (how long?) speed boost
-         * 4 = missile (instant kill)
+         * 4 = rocket (instant kill)
          * 5 = tacks? speed debuff for car hit
          * 6 = armor?
          */
