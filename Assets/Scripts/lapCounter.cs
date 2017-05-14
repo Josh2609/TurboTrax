@@ -47,7 +47,7 @@ public class lapCounter : MonoBehaviour {
             {
                 if (currentLap == maxLaps)
                 {
-                    MPFinish.playerFinished(playerName);
+                    //MPFinish.playerFinished(playerName);
                 }
                 currentLap++;
                 currentLapTime = 0f;

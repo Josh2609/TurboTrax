@@ -22,6 +22,8 @@ public class NetworkCar : NetworkBehaviour {
     //**
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
+    public GameObject rocketPrefab;
+    public Transform rocketSpawn;
     public GameObject minePrefab;
     public Transform mineSpawn;
     //**
@@ -93,6 +95,7 @@ public class NetworkCar : NetworkBehaviour {
         setColor();
         //Leaderboard.enabled = false;
         ClientScene.RegisterPrefab(bulletPrefab);
+        ClientScene.RegisterPrefab(rocketPrefab);
         ClientScene.RegisterPrefab(minePrefab);
         if (NetworkGameManager.sInstance != null)
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
@@ -201,7 +204,7 @@ public class NetworkCar : NetworkBehaviour {
          }
          if (Input.GetKeyDown(KeyCode.Y))
          {
-             powerUp = 1;//setPowerUp();
+             powerUp = 4;//setPowerUp();
              Debug.Log("Powerup Update == " + powerUp);
          }
 
@@ -249,7 +252,7 @@ public class NetworkCar : NetworkBehaviour {
          * 5 = tacks? speed debuff for car hit
          * 6 = armor?
          */
-        int randomNumber = 0;//Random.Range(0, 7);
+        int randomNumber = 4;//Random.Range(0, 7);
         Debug.Log("Powerup == " + randomNumber);
         if (randomNumber == 0)
         {
@@ -294,6 +297,13 @@ public class NetworkCar : NetworkBehaviour {
             _powerUpTimer = 8.0f;
             return powerUp;
         }
+        else if (powerUp == 4)
+        {
+            CmdFireRocket();
+            powerUp = -1;
+            _powerUpTimer = 8.0f;
+            return powerUp;
+        }
         return powerUp;
     }
 
@@ -309,6 +319,8 @@ public class NetworkCar : NetworkBehaviour {
                 if (currentLap == lapCount)
                 {
                     finished = true;
+                    MPFinish finish = gameObject.GetComponent<MPFinish>();
+                    finish.RpcPlayerFinished(playerName);
                     //NetworkGameManager.PlayerRanks.Add(playerName);
                     //MPFinish.finishPositions.Add(playerName);
                     //for (int i = 0; i < MPFinish.finishPositions.Count; i++)
@@ -411,6 +423,19 @@ public class NetworkCar : NetworkBehaviour {
         bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
         NetworkServer.Spawn(bullet);
         Destroy(bullet, 2.0f);
+    }
+
+    [Command]
+    void CmdFireRocket()
+    {
+        var rocket = (GameObject)Instantiate(
+            rocketPrefab,
+            rocketSpawn.position,
+            rocketSpawn.rotation);
+
+        rocket.GetComponent<Rigidbody2D>().velocity = rocket.transform.up * 6;
+        NetworkServer.Spawn(rocket);
+        Destroy(rocket, 2.0f);
     }
 
     [Command]

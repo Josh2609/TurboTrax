@@ -195,7 +195,7 @@ public class carController : NetworkBehaviour{
             {
                 if (currentLap == maxLaps)
                 {
-                    MPFinish.playerFinished(playerName);
+                    //MPFinish.playerFinished(playerName);
                     if(MPFinish.checkIfAllFinished())
                     {
                         raceFinish();

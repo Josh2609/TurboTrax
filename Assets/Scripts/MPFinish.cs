@@ -8,9 +8,9 @@ public class MPFinish : NetworkBehaviour {
     public static List<string> finishPositions = new List<string>();
     static List<string> playerList = new List<string>();
 
-    public static void playerFinished(string playerName)
+    [ClientRpc]
+    public void RpcPlayerFinished(string playerName)
     {
-        Debug.Log("Test");
         finishPositions.Add(playerName);
         Debug.Log("finishPositions.length = " + finishPositions.Count);
         for (int i = 0; i < finishPositions.Count; i++)
@@ -38,4 +38,6 @@ public class MPFinish : NetworkBehaviour {
     {
         return playerList.Count == finishPositions.Count;
     }
+
+
 }

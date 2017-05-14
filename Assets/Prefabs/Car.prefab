@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4017567088301416}
   m_Layer: 0
-  m_Name: BulletSpawn
+  m_Name: RocketSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,6 +80,21 @@ GameObject:
   - component: {fileID: 114336162488573736}
   m_Layer: 0
   m_Name: Car
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1256693661204476
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4256919767476566}
+  m_Layer: 0
+  m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -191,6 +206,19 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1084662438293774}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.69, z: 0}
+  m_LocalScale: {x: 2.9744995, y: 2.9745002, z: 2.974491}
+  m_Children: []
+  m_Father: {fileID: 4838312666318996}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4256919767476566
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1256693661204476}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 2.9744911, y: 2.9744911, z: 2.9744911}
   m_Children: []
@@ -204,13 +232,14 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1246048786641378}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -19.2, z: 0}
+  m_LocalPosition: {x: 14.532221, y: -12.180256, z: 0}
   m_LocalScale: {x: 0.3, y: 0.2, z: 0.336192}
   m_Children:
-  - {fileID: 4017567088301416}
+  - {fileID: 4256919767476566}
   - {fileID: 224733526914534596}
   - {fileID: 4894101329258838}
   - {fileID: 224971878952562486}
+  - {fileID: 4017567088301416}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -342,7 +371,10 @@ MonoBehaviour:
   Leaderboard: {fileID: 0}
   bulletPrefab: {fileID: 1287460028033244, guid: 96f59fef46645de469bf1063ac5b290a,
     type: 2}
-  bulletSpawn: {fileID: 4017567088301416}
+  bulletSpawn: {fileID: 4256919767476566}
+  rocketPrefab: {fileID: 1219337877739012, guid: cf2550835e069be47a12341ad7873be5,
+    type: 2}
+  rocketSpawn: {fileID: 4017567088301416}
   minePrefab: {fileID: 1427192477484938, guid: f424a9c292dc5c64a936557abd480a5f, type: 2}
   mineSpawn: {fileID: 4894101329258838}
   camera: {fileID: 20007713994257008}
@@ -351,6 +383,7 @@ MonoBehaviour:
   lapCount: 0
   first: {fileID: 0}
   lapCounterUI: {fileID: 114609216058039624}
+  lastCheckpoint: 
 --- !u!114 &114172374335785790
 MonoBehaviour:
   m_ObjectHideFlags: 1
