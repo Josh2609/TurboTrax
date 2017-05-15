@@ -42,8 +42,6 @@ public class NetworkCar : NetworkBehaviour {
     protected Collider2D _collider2D;
     protected Text _lapText;
 
-    protected float _rotation = 0;
-    protected float _acceleration = 0;
 
     protected float _shootingTimer = 0;
 
@@ -56,8 +54,6 @@ public class NetworkCar : NetworkBehaviour {
     int bullets;
     public trackLapTrigger first;
     trackLapTrigger next;
-    float currentLapTime = 0f;
-    float raceTime = 0f;
     int currentLap = 1;
     public Text lapCounterUI;
     //**
@@ -176,10 +172,10 @@ public class NetworkCar : NetworkBehaviour {
  
          float direction = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(Vector2.up));
          if(direction >= 0.0f) {
-             //_rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
+             //_rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
              _rigidbody2D.AddTorque((h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
          } else {
-             //_rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 5.0f);
+             //_rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
              _rigidbody2D.AddTorque((-h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
          }
  
@@ -328,7 +324,7 @@ public class NetworkCar : NetworkBehaviour {
                 {
                     finished = true;
                     MPFinish finish = gameObject.GetComponent<MPFinish>();
-                    finish.RpcPlayerFinished(playerName);
+                    //finish.RpcPlayerFinished(playerName);
                     //NetworkGameManager.PlayerRanks.Add(playerName);
                     //MPFinish.finishPositions.Add(playerName);
                     //for (int i = 0; i < MPFinish.finishPositions.Count; i++)
@@ -343,7 +339,6 @@ public class NetworkCar : NetworkBehaviour {
                     Kill();
                 }
                 currentLap++;
-                currentLapTime = 0f;
                 UpdateText();
             }
             SetNextTrigger(next);
@@ -462,39 +457,6 @@ public class NetworkCar : NetworkBehaviour {
     void CmdSpeedBoost()
     {
         //Destroy(mine, 2.0f);
-    }
-
-
-    public void CreateBullets()
-    {
-        //Vector3[] vectorBase = { _rigidbody2D.rotation * Vector3.right, _rigidbody2D.rotation * Vector3.up, _rigidbody2D.rotation * Vector3.forward };
-        //Vector3[] offsets = { -1.5f * vectorBase[0] + -0.5f * vectorBase[2], 1.5f * vectorBase[0] + -0.5f * vectorBase[2] };
-
-        //for (int i = 0; i < 2; ++i)
-        //{
-        //    GameObject bullet = Instantiate(bulletPrefab, _rigidbody2D.position + offsets[i], Quaternion.identity) as GameObject;
-        //    NetworkCarBullet bulletScript = bullet.GetComponent<NetworkCarBullet>();
-
-        //    bulletScript.originalDirection = vectorBase[2];
-        //    bulletScript.owner = this;
-
-        //    NetworkServer.SpawnWithClientAuthority(bullet, connectionToClient);
-        //}
-    }
-
-    [Command]
-    public void CmdFire(Vector3 position, Vector3 forward, Vector3 startingVelocity)
-    {
-        if (!isClient) //avoid to create bullet twice (here & in Rpc call) on hosting client
-            CreateBullets();
-
-        RpcFire();
-    }
-
-    [ClientRpc]
-    public void RpcFire()
-    {
-        CreateBullets();
     }
 
     [ClientRpc]
