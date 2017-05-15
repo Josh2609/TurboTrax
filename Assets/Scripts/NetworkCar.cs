@@ -11,8 +11,8 @@ public class NetworkCar : NetworkBehaviour {
     public float acceleration = 5f;
     public float maxSpeed = 7.0f;
     public float speed = 7.0f;
-    public float turning = 3.0f;
-    public float friction = 1f;
+    public float turning = 1.0f;
+    public float friction = 2.0f;
     public Vector2 currentSpeed;
 
     public Text Leaderboard;
