@@ -80,6 +80,7 @@ public class NetworkCar : NetworkBehaviour {
         camera.enabled = true;
     }
 
+    public Transform spawnPoint;
     void Start()
     {
         powerUp = -1;
@@ -101,6 +102,12 @@ public class NetworkCar : NetworkBehaviour {
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
             Init();
         }
+        MPFinish.addToPlayerList(playerName);
+        int joinPosition = MPFinish.getIndexOfPlayer(playerName);
+        Debug.Log("joinPosition. = " + joinPosition);
+        spawnPoint = (Transform)GameObject.Find("Spawn" + joinPosition).GetComponent(typeof(Transform));
+        this.transform.position = spawnPoint.position;
+        this.transform.rotation = spawnPoint.rotation;
     }
 
     void setColor()

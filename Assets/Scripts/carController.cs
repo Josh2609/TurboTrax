@@ -70,6 +70,7 @@ public class carController : NetworkBehaviour{
         playerNameMesh.text = playerName;
         setColor();
 
+
          
         //this.transform.position = ;
     }
