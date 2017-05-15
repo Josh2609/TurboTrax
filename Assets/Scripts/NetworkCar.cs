@@ -102,6 +102,7 @@ public class NetworkCar : NetworkBehaviour {
         {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
             Init();
         }
+        Debug.Log(Network.player.ipAddress);////
         MPFinish.addToPlayerList(playerName);
         int joinPosition = MPFinish.getIndexOfPlayer(playerName);
         Debug.Log("joinPosition. = " + joinPosition);
