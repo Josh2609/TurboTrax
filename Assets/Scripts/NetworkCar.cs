@@ -8,8 +8,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class NetworkCar : NetworkBehaviour {
 
-    public float acceleration = 5f;
-    public float maxSpeed = 7.0f;
+    public float acceleration = 0.4f; //5f;
+    public float speedDecay = 0.96f;
+    public float rotationStep = 10f;
+
+    public float maxSpeed = 10f;//7.0f;
+    public float backspeed = 1f;
+
     public float speed = 7.0f;
     public float turning = 1.0f;
     public float friction = 2.0f;
@@ -147,6 +152,17 @@ public class NetworkCar : NetworkBehaviour {
         NetworkGameManager.sCars.Remove(this);
     }
 
+
+    Vector2 ForwardVelocity()
+    {
+        return transform.up * Vector2.Dot(GetComponent<Rigidbody2D>().velocity, transform.up);
+    }
+
+    Vector2 RightVelocity()
+    {
+        return transform.right * Vector2.Dot(GetComponent<Rigidbody2D>().velocity, transform.right);
+    }
+
     [ClientCallback]
     void Update()
     {
@@ -163,41 +179,91 @@ public class NetworkCar : NetworkBehaviour {
 
         if (!isLocalPlayer || !_canControl)
             return;
+
         // ********** MOVEMENT START **********
-        float h = -Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
- 
-         Vector2 speed = transform.up * (v * acceleration);
-         _rigidbody2D.AddForce(speed);
- 
-         float direction = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(Vector2.up));
-         if(direction >= 0.0f) {
-             //_rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
-             _rigidbody2D.AddTorque((h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
-         } else {
-             //_rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
-             _rigidbody2D.AddTorque((-h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
-         }
- 
-         Vector2 forward = new Vector2(0.0f, 0.5f);
-         float steeringRightAngle;
-         if(_rigidbody2D.angularVelocity > 0) {
-             steeringRightAngle = -90;
-         } else {
-             steeringRightAngle = 90;
-         }
- 
-         Vector2 rightAngleFromForward = Quaternion.AngleAxis(steeringRightAngle, Vector3.forward) * forward;
-         Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(rightAngleFromForward), Color.green);
- 
-         float driftForce = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(rightAngleFromForward.normalized));
- 
-         Vector2 relativeForce = (rightAngleFromForward.normalized * -1.0f) * (driftForce * 10.0f);
- 
- 
-         Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(relativeForce), Color.red);
- 
-         _rigidbody2D.AddForce(_rigidbody2D.GetRelativeVector(relativeForce));
+
+
+        float speedForce = 3f;
+        float torqueForce = -200f;
+        float driftFactorSticky = 0.9f;
+        float driftFactorSlippy = 0.6f;
+        float maxStickyVelocity = 2.5f;
+
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+
+        Debug.Log(RightVelocity().magnitude);
+
+        float driftFactor = driftFactorSticky;
+        if (RightVelocity().magnitude > maxStickyVelocity)
+        {
+            driftFactor = driftFactorSlippy;
+        }
+
+        rb.velocity = ForwardVelocity() + RightVelocity() * driftFactor;
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            rb.AddForce(transform.up * speedForce);
+
+            // Consider using rb.AddForceAtPosition to apply force twice, at the position
+            // of the rear tires/tyres
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            rb.AddForce(transform.up * -speedForce / 2f);
+
+            // Consider using rb.AddForceAtPosition to apply force twice, at the position
+            // of the rear tires/tyres
+        }
+
+        // If you are using positional wheels in your physics, then you probably
+        // instead of adding angular momentum or torque, you'll instead want
+        // to add left/right Force at the position of the two front tire/types
+        // proportional to your current forward speed (you are converting some
+        // forward speed into sideway force)
+        float tf = Mathf.Lerp(0, torqueForce, rb.velocity.magnitude / 2);
+        rb.angularVelocity = Input.GetAxis("Horizontal") * tf;
+
+        //float h = -Input.GetAxis("Horizontal");
+        //float v = Input.GetAxis("Vertical");
+
+        //Vector2 speed = transform.up * (v * acceleration);
+        //_rigidbody2D.AddForce(speed);
+
+        //float direction = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(Vector2.up));
+        //if (direction >= 0.0f)
+        //{
+        //    //_rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
+        //    _rigidbody2D.AddTorque((h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
+        //}
+        //else
+        //{
+        //    //_rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
+        //    _rigidbody2D.AddTorque((-h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
+        //}
+
+        //Vector2 forward = new Vector2(0.0f, 0.5f);
+        //float steeringRightAngle;
+        //if (_rigidbody2D.angularVelocity > 0)
+        //{
+        //    steeringRightAngle = -90;
+        //}
+        //else
+        //{
+        //    steeringRightAngle = 90;
+        //}
+
+        //Vector2 rightAngleFromForward = Quaternion.AngleAxis(steeringRightAngle, Vector3.forward) * forward;
+        //Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(rightAngleFromForward), Color.green);
+
+        //float driftForce = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(rightAngleFromForward.normalized));
+
+        //Vector2 relativeForce = (rightAngleFromForward.normalized * -1.0f) * (driftForce * 10.0f);
+
+
+        //Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(relativeForce), Color.red);
+
+        //_rigidbody2D.AddForce(_rigidbody2D.GetRelativeVector(relativeForce));
      
         // ********** MOVEMENT END **********
 
