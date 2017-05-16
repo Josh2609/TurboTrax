@@ -11,6 +11,8 @@ public class NetworkGameManager : NetworkBehaviour
     static public List<NetworkCar> sCars = new List<NetworkCar>();
     static public List<NetworkCar> FinishPositions = new List<NetworkCar>();
 
+    
+
 
    // [SyncListString]
     static public List<string> PlayerRanks = new List<string>();

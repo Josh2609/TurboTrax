@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class Bullet : MonoBehaviour
+public class Bullet : NetworkBehaviour
 {
+    SpawnManager spawnManager;
+    void Start()
+    {
+        spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+    }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -13,6 +19,7 @@ public class Bullet : MonoBehaviour
         {
             health.TakeDamage(10);
         }
-        Destroy(gameObject);
+        spawnManager.UnSpawnObject(gameObject);
+        NetworkServer.UnSpawn(gameObject);
     }
 }

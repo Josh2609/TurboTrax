@@ -9,6 +9,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class NetworkCar : NetworkBehaviour {
 
+    SpawnManager spawnManager;
 
     public delegate void changePowerUpUI(int powerup);
     public event changePowerUpUI onPowerUpChange;
@@ -94,6 +95,7 @@ public class NetworkCar : NetworkBehaviour {
     public Transform spawnPoint;
     void Start()
     {
+        spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         powerUp = -1;
         _powerUpTimer = 8.0f;
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -257,7 +259,7 @@ public class NetworkCar : NetworkBehaviour {
         {
             randomNumber = 0;
         }
-        randomNumber = 1;
+        randomNumber = 0;
         Debug.Log("Powerup == " + randomNumber);
         if (randomNumber == 0)
         {
@@ -401,15 +403,30 @@ public class NetworkCar : NetworkBehaviour {
 
     [Command]
     void CmdFireGun()
-    {
-        var bullet = (GameObject)Instantiate(
-            bulletPrefab,
-            bulletSpawn.position,
-            bulletSpawn.rotation);
+    {//
+        var bullet = spawnManager.GetFromPool(bulletSpawn.transform.position);
+        bullet.GetComponent<Rigidbody2D>().velocity = transform.up * 6;
+        bullet.GetComponent<Rigidbody2D>().transform.rotation = bulletSpawn.transform.rotation;
 
-        bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
-        NetworkServer.Spawn(bullet);
-        Destroy(bullet, 2.0f);
+        NetworkServer.Spawn(bullet, spawnManager.assetId);
+
+        StartCoroutine(Destroy(bullet, 2.0f));
+
+        //var bullet = (GameObject)Instantiate(
+        //    bulletPrefab,
+        //    bulletSpawn.position,
+        //    bulletSpawn.rotation);
+
+        //bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
+        //NetworkServer.Spawn(bullet);
+        //Destroy(bullet, 2.0f);
+    }
+
+    public IEnumerator Destroy(GameObject go, float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        spawnManager.UnSpawnObject(go);
+        NetworkServer.UnSpawn(go);
     }
 
     [Command]
