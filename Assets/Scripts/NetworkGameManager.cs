@@ -40,10 +40,10 @@ public class NetworkGameManager : NetworkBehaviour
     [ServerCallback]
     void Update()
     {
-        Debug.Log("Test " + sCars[0]);
+        //Debug.Log("Test " + sCars[0]);
         for (int i = 0; i < sCars.Count; i++)
         {
-            Debug.Log(sCars[i].finished + " i");
+            //Debug.Log(sCars[i].finished + " i");
             if (sCars[i].finished && !PlayerRanks.Contains(sCars[i].playerName))
             {  
                 PlayerRanks.Add(sCars[i].playerName);

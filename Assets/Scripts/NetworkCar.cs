@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -7,6 +8,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(NetworkTransform))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class NetworkCar : NetworkBehaviour {
+
+
+    public delegate void changePowerUpUI(int powerup);
+    public event changePowerUpUI onPowerUpChange;
 
     public float acceleration = 0.4f; //5f;
     public float speedDecay = 0.96f;
@@ -65,7 +70,7 @@ public class NetworkCar : NetworkBehaviour {
     //**
     Sprite[] carSprites;
 
-
+    PowerUpUI powerUpUI;
     void Awake()
     {
         //register the spaceship in the gamemanager, that will allow to loop on it.
@@ -74,7 +79,8 @@ public class NetworkCar : NetworkBehaviour {
         
         camera.enabled = false;
         Leaderboard = (Text)GameObject.Find("Leaderboard").GetComponent(typeof(Text));
-       
+        powerUpUI = gameObject.GetComponent<PowerUpUI>();
+        powerUpUI.manualStart();
     }
     
     public override void OnStartLocalPlayer()
@@ -233,7 +239,7 @@ public class NetworkCar : NetworkBehaviour {
 
          if (Input.GetKeyDown(KeyCode.G))
          {
-             powerUp = 2;//setPowerUp();
+             powerUp = 0;//setPowerUp();
              Debug.Log("Powerup Update == " + powerUp);
          }
          if (Input.GetKeyDown(KeyCode.Y))
@@ -286,11 +292,20 @@ public class NetworkCar : NetworkBehaviour {
          * 5 = tacks? speed debuff for car hit
          * 6 = armor?
          */
-        int randomNumber = 4;//Random.Range(0, 7);
+        int randomNumber = UnityEngine.Random.Range(0, 7);
+        if (randomNumber == 3)
+        {
+            randomNumber = 0;
+        }
+        randomNumber = 1;
         Debug.Log("Powerup == " + randomNumber);
         if (randomNumber == 0)
         {
             bullets = 10;
+        }
+        if(onPowerUpChange != null)
+        {
+            onPowerUpChange(randomNumber);
         }
         return randomNumber;
     }
