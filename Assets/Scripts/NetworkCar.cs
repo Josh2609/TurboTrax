@@ -184,21 +184,6 @@ public class NetworkCar : NetworkBehaviour {
     [ClientCallback]
     void Update()
     {
-        for (int i = 0; i < NetworkGameManager.FinishPositionsName.Count; i++)
-        {
-            Debug.Log("Finished " + i + " " + NetworkGameManager.FinishPositionsName[i]);
-        }
-
-        //if (!NetworkGameManager.FinishPositionsName.Contains(playerName))
-        //{
-        //    NetworkGameManager.FinishPositionsName.Add(playerName);
-        //}
-        //Leaderboard.text = "";
-        //for (int i = 0; i < NetworkGameManager.FinishPositionsName.Count; i++)
-        //{
-        //    Leaderboard.text += "Finished " + i + " " + NetworkGameManager.FinishPositionsName[i];
-        //    Debug.Log("Finished " + i + " " + NetworkGameManager.FinishPositionsName[i]);
-        //}
 
         if (!isLocalPlayer || !_canControl)
             return;
@@ -206,11 +191,9 @@ public class NetworkCar : NetworkBehaviour {
         // ********** MOVEMENT START **********
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
-        //Debug.Log(RightVelocity().magnitude);
-
         float driftFactor = driftFactorSticky;
         if (RightVelocity().magnitude > maxStickyVelocity)
-        {//
+        {
             driftFactor = driftFactorSlippy;
         }
 
@@ -219,43 +202,16 @@ public class NetworkCar : NetworkBehaviour {
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             rb.AddForce(transform.up * speedForce);
-
-            // Consider using rb.AddForceAtPosition to apply force twice, at the position
-            // of the rear tires/tyres
         }
         if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             rb.AddForce(transform.up * -speedForce / 2f);
-
-            // Consider using rb.AddForceAtPosition to apply force twice, at the position
-            // of the rear tires/tyres
         }
 
-        // If you are using positional wheels in your physics, then you probably
-        // instead of adding angular momentum or torque, you'll instead want
-        // to add left/right Force at the position of the two front tire/types
-        // proportional to your current forward speed (you are converting some
-        // forward speed into sideway force)
         float tf = Mathf.Lerp(0, torqueForce, rb.velocity.magnitude / 2);
         rb.angularVelocity = Input.GetAxis("Horizontal") * tf;
         // ********** MOVEMENT END **********
 
-         if (Input.GetKeyDown(KeyCode.G))
-         {
-             powerUp = 0;//setPowerUp();
-             Debug.Log("Powerup Update == " + powerUp);
-         }
-         if (Input.GetKeyDown(KeyCode.Y))
-         {
-             powerUp = 4;//setPowerUp();
-             Debug.Log("Powerup Update == " + powerUp);
-         }
-
-         if (Input.GetKeyDown(KeyCode.H))
-         {
-             powerUp = -1;//setPowerUp();
-             _powerUpTimer = 0.0f;
-         }
         if (powerUp == -1 && _powerUpTimer <= 0.0f)
         {
             powerUp = setPowerUp();
@@ -367,12 +323,7 @@ public class NetworkCar : NetworkBehaviour {
                 if (currentLap == lapCount)
                 {
                     finished = true;
-                    CmdPlayerFinished();
-                    for (int i = 0; i < NetworkGameManager.FinishPositionsName.Count; i++)
-                    {
-                        Debug.Log("Finished " + i + " " + NetworkGameManager.FinishPositionsName[i]);
-                    }
-                    Kill();//
+                    Kill();
                 }
                 currentLap++;
                 UpdateText();
@@ -381,11 +332,6 @@ public class NetworkCar : NetworkBehaviour {
         }
     }
 
-    [Command]
-    public void CmdPlayerFinished()
-    {
-        NetworkGameManager.FinishPositionsName.Add(this.playerName);
-    }
     void SetNextTrigger(trackLapTrigger trigger)
     {
         Debug.Log("TRIGGERED!");
@@ -412,9 +358,6 @@ public class NetworkCar : NetworkBehaviour {
     {
         GetComponent<Renderer>().enabled = enable;
         _collider2D.enabled = enable;
-        //_collider2D.enabled = isServer && enable;
-        //trailGameobject.SetActive(enable);
-
         _canControl = enable;
     }
 

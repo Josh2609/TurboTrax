@@ -47,12 +47,10 @@ public class Health : NetworkBehaviour {
     {
         if (isLocalPlayer)
         {
-            // move back to zero location
             NetworkCar car = gameObject.GetComponent<NetworkCar>();
             Transform checkpoint = (Transform)GameObject.Find(car.lastCheckpoint).GetComponent(typeof(Transform));
             transform.rotation = checkpoint.rotation;
             transform.position = new Vector3(checkpoint.transform.position.x, checkpoint.transform.position.y, 0);
-            //transform.position = Vector3.zero;
         }
     }
     
