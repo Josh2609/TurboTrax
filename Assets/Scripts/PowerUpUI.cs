@@ -10,24 +10,46 @@ public class PowerUpUI : MonoBehaviour {
     {
         Debug.Log("Print");
         car = gameObject.GetComponent<NetworkCar>();
-        car.onPowerUpChange += changeImage;      
+        car.onPowerUpChange += changePowerUpImage;
+        car.onPowerUpTimerChange += changePowerUpTime;  
     }
     public Sprite bulletSprite;
     public Sprite mineSprite;
     public Sprite rocketSprite;
     public Sprite healthSprite;
     public Image powerUpUI;
+    public Text powerUpTimer;
 
-    public void changeImage(int powerup)
+    public void changePowerUpTime(float timer)
     {
-        Debug.Log("Worked");
+        if (timer <= 0.1f)
+        {
+            powerUpTimer.enabled = false;
+        }
+        else
+        {
+            powerUpTimer.enabled = true;
+        }
+        int rounded = (int) timer;
+        powerUpTimer.text = rounded.ToString();
+    }
+
+    public void changePowerUpImage(int powerup)
+    {
+        if (powerup == -1)
+        {
+            powerUpUI.enabled = false;
+        }
+        else
+        {
+            powerUpUI.enabled = true;
+        }
         if(powerup == 0)
         {
             powerUpUI.sprite = bulletSprite;
         }
         else if (powerup == 1)
         {
-            Debug.Log("plz");
             powerUpUI.sprite = mineSprite;
         }
         else if (powerup == 2)

@@ -13,6 +13,9 @@ public class NetworkCar : NetworkBehaviour {
     public delegate void changePowerUpUI(int powerup);
     public event changePowerUpUI onPowerUpChange;
 
+    public delegate void changePowerUpTimerUI(float _powerUpTimer);
+    public event changePowerUpTimerUI onPowerUpTimerChange;
+
     public float acceleration = 0.4f; //5f;
     public float speedDecay = 0.96f;
     public float rotationStep = 10f;
@@ -264,6 +267,7 @@ public class NetworkCar : NetworkBehaviour {
             }
         } else if (_powerUpTimer > 0.0f)
         {
+            if (onPowerUpTimerChange != null) { onPowerUpTimerChange(_powerUpTimer); } // informs any observers
             _powerUpTimer -= Time.deltaTime;
         }
 
@@ -326,7 +330,6 @@ public class NetworkCar : NetworkBehaviour {
                 powerUp = -1;
                 _powerUpTimer = 8.0f;
                 Debug.Log("powerUp in bullets == " + powerUp);
-                return powerUp;
             }
             if (_shootingTimer > 0)
                 _shootingTimer -= Time.deltaTime;
@@ -335,22 +338,20 @@ public class NetworkCar : NetworkBehaviour {
             CmdDropMine();
             powerUp = -1;
             _powerUpTimer = 8.0f;
-            return powerUp;
         } else if (powerUp == 2)
         {
             Debug.Log("RefillHealth");
             CmdRefillHealth();
             powerUp = -1;
             _powerUpTimer = 8.0f;
-            return powerUp;
         }
         else if (powerUp == 4)
         {
             CmdFireRocket();
             powerUp = -1;
             _powerUpTimer = 8.0f;
-            return powerUp;
         }
+        if (onPowerUpChange != null) { onPowerUpChange(powerUp); } // informs any observers
         return powerUp;
     }
 
