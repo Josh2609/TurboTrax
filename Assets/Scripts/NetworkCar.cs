@@ -24,6 +24,8 @@ public class NetworkCar : NetworkBehaviour {
     static int powerUp;
     float _powerUpTimer;
 
+    public bool finished = false;
+
     //**
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
@@ -54,7 +56,6 @@ public class NetworkCar : NetworkBehaviour {
 
     protected bool _wasInit = false;
 
-    bool finished = false;
     //**
     int bullets;
     public trackLapTrigger first;
@@ -163,52 +164,57 @@ public class NetworkCar : NetworkBehaviour {
         return transform.right * Vector2.Dot(GetComponent<Rigidbody2D>().velocity, transform.right);
     }
 
+    float speedForce = 3f;
+    float torqueForce = -200f;
+    float driftFactorSticky = 0.9f;
+    float driftFactorSlippy = 0.6f;
+    float maxStickyVelocity = 2.5f;
+
+   public List<string> PlayerRanks = new List<string>();
+
     [ClientCallback]
     void Update()
     {
-        //if (!NetworkGameManager.PlayerNames.Contains(playerName))
-        //{
+        for (int i = 0; i < NetworkGameManager.FinishPositionsName.Count; i++)
+        {
+            Debug.Log("Finished " + i + " " + NetworkGameManager.FinishPositionsName[i]);
+        }
 
-        //    NetworkGameManager.PlayerNames.Add(playerName);
+        //if (!NetworkGameManager.FinishPositionsName.Contains(playerName))
+        //{
+        //    NetworkGameManager.FinishPositionsName.Add(playerName);
         //}
         //Leaderboard.text = "";
-        //for (int i = 0; i < NetworkGameManager.PlayerNames.Count; i++)
+        //for (int i = 0; i < NetworkGameManager.FinishPositionsName.Count; i++)
         //{
-        //    Leaderboard.text += i + ": " + NetworkGameManager.PlayerNames[i] + "\n";
+        //    Leaderboard.text += "Finished " + i + " " + NetworkGameManager.FinishPositionsName[i];
+        //    Debug.Log("Finished " + i + " " + NetworkGameManager.FinishPositionsName[i]);
         //}
 
         if (!isLocalPlayer || !_canControl)
             return;
 
         // ********** MOVEMENT START **********
-
-
-        float speedForce = 3f;
-        float torqueForce = -200f;
-        float driftFactorSticky = 0.9f;
-        float driftFactorSlippy = 0.6f;
-        float maxStickyVelocity = 2.5f;
-
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
-        Debug.Log(RightVelocity().magnitude);
+        //Debug.Log(RightVelocity().magnitude);
 
         float driftFactor = driftFactorSticky;
         if (RightVelocity().magnitude > maxStickyVelocity)
-        {
+        {//
             driftFactor = driftFactorSlippy;
         }
 
         rb.velocity = ForwardVelocity() + RightVelocity() * driftFactor;
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
         {
             rb.AddForce(transform.up * speedForce);
 
             // Consider using rb.AddForceAtPosition to apply force twice, at the position
             // of the rear tires/tyres
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
         {
             rb.AddForce(transform.up * -speedForce / 2f);
 
@@ -223,48 +229,6 @@ public class NetworkCar : NetworkBehaviour {
         // forward speed into sideway force)
         float tf = Mathf.Lerp(0, torqueForce, rb.velocity.magnitude / 2);
         rb.angularVelocity = Input.GetAxis("Horizontal") * tf;
-
-        //float h = -Input.GetAxis("Horizontal");
-        //float v = Input.GetAxis("Vertical");
-
-        //Vector2 speed = transform.up * (v * acceleration);
-        //_rigidbody2D.AddForce(speed);
-
-        //float direction = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(Vector2.up));
-        //if (direction >= 0.0f)
-        //{
-        //    //_rigidbody2D.rotation += h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
-        //    _rigidbody2D.AddTorque((h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
-        //}
-        //else
-        //{
-        //    //_rigidbody2D.rotation -= h * turning * (_rigidbody2D.velocity.magnitude / 3.0f);
-        //    _rigidbody2D.AddTorque((-h * turning) * (_rigidbody2D.velocity.magnitude / 10.0f));
-        //}
-
-        //Vector2 forward = new Vector2(0.0f, 0.5f);
-        //float steeringRightAngle;
-        //if (_rigidbody2D.angularVelocity > 0)
-        //{
-        //    steeringRightAngle = -90;
-        //}
-        //else
-        //{
-        //    steeringRightAngle = 90;
-        //}
-
-        //Vector2 rightAngleFromForward = Quaternion.AngleAxis(steeringRightAngle, Vector3.forward) * forward;
-        //Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(rightAngleFromForward), Color.green);
-
-        //float driftForce = Vector2.Dot(_rigidbody2D.velocity, _rigidbody2D.GetRelativeVector(rightAngleFromForward.normalized));
-
-        //Vector2 relativeForce = (rightAngleFromForward.normalized * -1.0f) * (driftForce * 10.0f);
-
-
-        //Debug.DrawLine((Vector3)_rigidbody2D.position, (Vector3)_rigidbody2D.GetRelativePoint(relativeForce), Color.red);
-
-        //_rigidbody2D.AddForce(_rigidbody2D.GetRelativeVector(relativeForce));
-     
         // ********** MOVEMENT END **********
 
          if (Input.GetKeyDown(KeyCode.G))
@@ -328,8 +292,6 @@ public class NetworkCar : NetworkBehaviour {
         {
             bullets = 10;
         }
-        NetworkGameManager.PlayerNames.Add("Num = " + randomNumber);
-
         return randomNumber;
     }
 
@@ -389,20 +351,12 @@ public class NetworkCar : NetworkBehaviour {
                 if (currentLap == lapCount)
                 {
                     finished = true;
-                    MPFinish finish = gameObject.GetComponent<MPFinish>();
-                    //finish.RpcPlayerFinished(playerName);
-                    //NetworkGameManager.PlayerRanks.Add(playerName);
-                    //MPFinish.finishPositions.Add(playerName);
-                    //for (int i = 0; i < MPFinish.finishPositions.Count; i++)
-                    //{
-                     //   Debug.Log("Finished " + i + " " + MPFinish.finishPositions[i]);
-                        //Leaderboard.text += "\nDicks: " + NetworkGameManager.PlayerRanks[i];
-                   // }
-                    //Leaderboard.text += "\nDicks:" + playerName;
-                    //Leaderboard.enabled = true;
-                    //NetworkGameManager.PlayerRanks.Add(playerName);
-                    //Debug.Log("Dongers: " + NetworkGameManager.PlayerRanks.Count);
-                    Kill();
+                    CmdPlayerFinished();
+                    for (int i = 0; i < NetworkGameManager.FinishPositionsName.Count; i++)
+                    {
+                        Debug.Log("Finished " + i + " " + NetworkGameManager.FinishPositionsName[i]);
+                    }
+                    Kill();//
                 }
                 currentLap++;
                 UpdateText();
@@ -411,6 +365,11 @@ public class NetworkCar : NetworkBehaviour {
         }
     }
 
+    [Command]
+    public void CmdPlayerFinished()
+    {
+        NetworkGameManager.FinishPositionsName.Add(this.playerName);
+    }
     void SetNextTrigger(trackLapTrigger trigger)
     {
         Debug.Log("TRIGGERED!");
@@ -455,16 +414,16 @@ public class NetworkCar : NetworkBehaviour {
     [Server]
     public void Kill()
     {
+
         lapCount -= 1;
-        
         RpcDestroyed();
         EnableCar(false);
 
-        if (lapCount > 0)
-        {
-            //we start the coroutine on the manager, as disabling a gameobject stop ALL coroutine started by it
-            NetworkGameManager.sInstance.StartCoroutine(NetworkGameManager.sInstance.WaitForRespawn(this));
-        }
+            if (lapCount > 0)
+            {
+                //we start the coroutine on the manager, as disabling a gameobject stop ALL coroutine started by it
+                NetworkGameManager.sInstance.StartCoroutine(NetworkGameManager.sInstance.WaitForRespawn(this));
+            }
     }
 
     [Server]

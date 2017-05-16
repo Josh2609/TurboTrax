@@ -9,11 +9,12 @@ using UnityEngine.UI;
 public class NetworkGameManager : NetworkBehaviour
 {
     static public List<NetworkCar> sCars = new List<NetworkCar>();
+    static public List<NetworkCar> FinishPositions = new List<NetworkCar>();
+
+    static public List<string> FinishPositionsName = new List<string>();
 
    // [SyncListString]
     static public List<string> PlayerRanks = new List<string>();
-    static public List<string> PlayerNames = new List<string>();
-    static public List<string> RPCRanks = new List<string>();
     static public NetworkGameManager sInstance = null;
 
     public GameObject uiScoreZone;
@@ -39,6 +40,16 @@ public class NetworkGameManager : NetworkBehaviour
     [ServerCallback]
     void Update()
     {
+        Debug.Log("Test " + sCars[0]);
+        for (int i = 0; i < sCars.Count; i++)
+        {
+            Debug.Log(sCars[i].finished + " i");
+            if (sCars[i].finished && !PlayerRanks.Contains(sCars[i].playerName))
+            {  
+                PlayerRanks.Add(sCars[i].playerName);
+                sCars[i].PlayerRanks = PlayerRanks;//
+            }
+        }
         if (!_running || sCars.Count == 0)
             return;
 
