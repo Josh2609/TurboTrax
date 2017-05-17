@@ -7,7 +7,6 @@ public class loadScene : MonoBehaviour {
 
     public void nextScene(string scene)
     {
-        lapCounter.maxLaps = 5;
         SceneManager.LoadScene(scene);
         if (scene == "MainMenu")
             Destroy(GameObject.Find("LobbyManager"));

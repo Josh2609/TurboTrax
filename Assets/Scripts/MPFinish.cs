@@ -12,11 +12,6 @@ public class MPFinish : NetworkBehaviour {
     public void RpcPlayerFinished(string playerName)
     {
         finishPositions.Add(playerName);
-        Debug.Log("finishPositions.length = " + finishPositions.Count);
-        for (int i = 0; i < finishPositions.Count; i++)
-        {
-            Debug.Log("finishPositions. = " + finishPositions[i]);
-        }
     }
 
     public static void addToPlayerList(string playerName)

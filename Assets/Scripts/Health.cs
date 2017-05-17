@@ -31,7 +31,6 @@ public class Health : NetworkBehaviour {
 
     public void refillHealth()
     {
-        Debug.Log("Health.RefillHealth");
         if (!isServer)
             return;
         currentHealth = maxHealth;

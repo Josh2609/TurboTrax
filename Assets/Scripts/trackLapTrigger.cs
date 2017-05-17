@@ -11,7 +11,6 @@ public class trackLapTrigger : MonoBehaviour {
         NetworkCar car = other.gameObject.GetComponent<NetworkCar>();
         if (car)
         {
-            Debug.Log("lap trigger " + gameObject.name);
             car.OnLapTrigger(this);
         }
     }
