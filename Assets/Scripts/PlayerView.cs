@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PowerUpUI : MonoBehaviour {
+public class PlayerView : MonoBehaviour {
 
     NetworkCar car;
     public void manualStart()
@@ -25,7 +25,7 @@ public class PowerUpUI : MonoBehaviour {
     public void changeLapCount(int currentLap, int maxLaps)
     {
         Debug.Log("Workds");
-        lapCounterUI.text = string.Format("Lapssss {0}/{1}", currentLap, maxLaps);
+        lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, maxLaps);
     }
 
     public void changePowerUpTime(float timer)

@@ -9,8 +9,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody2D))]
 public class NetworkCar : NetworkBehaviour {
 
-    SpawnManager spawnManager;
-
     public delegate void changeLapCounterUI(int currentLap, int lapCount);
     public event changeLapCounterUI onLapChange;
 
@@ -20,6 +18,8 @@ public class NetworkCar : NetworkBehaviour {
     public delegate void changePowerUpTimerUI(float _powerUpTimer);
     public event changePowerUpTimerUI onPowerUpTimerChange;
 
+    Camera MainCamera;
+    SpawnManager spawnManager;
     public Text Leaderboard;
     static int powerUp;
     float _powerUpTimer;
@@ -63,16 +63,17 @@ public class NetworkCar : NetworkBehaviour {
     //**
     Sprite[] carSprites;
 
-    PowerUpUI powerUpUI;
+    PlayerView powerUpUI;
     void Awake()
     {
         //register the spaceship in the gamemanager, that will allow to loop on it.
         carSprites = Resources.LoadAll<Sprite>("Car");
         NetworkGameManager.sCars.Add(this);
-        
+        MainCamera = (Camera)GameObject.Find("MainCamera").GetComponent(typeof(Camera));
+        MainCamera.enabled = false;
         camera.enabled = false;
         Leaderboard = (Text)GameObject.Find("Leaderboard").GetComponent(typeof(Text));
-        powerUpUI = gameObject.GetComponent<PowerUpUI>();
+        powerUpUI = gameObject.GetComponent<PlayerView>();
         powerUpUI.manualStart();
     }
     
@@ -306,6 +307,8 @@ public class NetworkCar : NetworkBehaviour {
                 if (currentLap == lapCount)
                 {
                     finished = true;
+                    camera.enabled = false;
+                    MainCamera.enabled = true;
                     Kill();
                 }
                 currentLap++;

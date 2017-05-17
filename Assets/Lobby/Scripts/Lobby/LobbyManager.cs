@@ -88,7 +88,7 @@ namespace Prototype.NetworkLobby
             lobbyManager.playScene = trackToLoad;
 
             trackCounter++;
-            if (trackCounter > 2)
+            if (trackCounter > 3)
             {
                 trackCounter = 1;
             }
