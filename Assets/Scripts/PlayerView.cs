@@ -8,7 +8,6 @@ public class PlayerView : MonoBehaviour {
     NetworkCar car;
     public void manualStart()
     {
-        Debug.Log("Print");
         car = gameObject.GetComponent<NetworkCar>();
         car.onPowerUpChange += changePowerUpImage;
         car.onPowerUpTimerChange += changePowerUpTime;

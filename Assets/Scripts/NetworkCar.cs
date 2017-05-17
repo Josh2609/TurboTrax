@@ -66,7 +66,6 @@ public class NetworkCar : NetworkBehaviour {
     PlayerView playerView;
     void Awake()
     {
-        //register the spaceship in the gamemanager, that will allow to loop on it.
         carSprites = Resources.LoadAll<Sprite>("Car");
         NetworkGameManager.sCars.Add(this);
         MainCamera = (Camera)GameObject.Find("MainCamera").GetComponent(typeof(Camera));
@@ -101,13 +100,11 @@ public class NetworkCar : NetworkBehaviour {
         ClientScene.RegisterPrefab(rocketPrefab);
         ClientScene.RegisterPrefab(minePrefab);
         if (NetworkGameManager.sInstance != null)
-        {//we MAY be awake late (see comment on _wasInit above), so if the instance is already there we init
+        {
             Init();
         }
-        Debug.Log(Network.player.ipAddress);////
         MPFinish.addToPlayerList(playerName);
         int joinPosition = MPFinish.getIndexOfPlayer(playerName);
-        Debug.Log("joinPosition. = " + joinPosition);
         spawnPoint = (Transform)GameObject.Find("Spawn" + joinPosition).GetComponent(typeof(Transform));
         this.transform.position = spawnPoint.position;
         this.transform.rotation = spawnPoint.rotation;
@@ -201,6 +198,7 @@ public class NetworkCar : NetworkBehaviour {
         rb.angularVelocity = Input.GetAxis("Horizontal") * tf;
         // ********** MOVEMENT END **********
 
+        // checks if there is a power up and either allows the player to use it, sets a new one or counts down the time until a new one is set
         if (powerUp == -1 && _powerUpTimer <= 0.0f)
         {
             powerUp = setPowerUp();
@@ -225,14 +223,14 @@ public class NetworkCar : NetworkBehaviour {
             return;
     }
 
+    // Sets the powerup with a random number
     public int setPowerUp()
     {
-        int randomNumber = UnityEngine.Random.Range(0, 7);
-        if (randomNumber == 3)
+        int randomNumber = UnityEngine.Random.Range(0, 5);
+        if (randomNumber == 3 || randomNumber == 5)
         {
             randomNumber = 0;
         }
-        Debug.Log("Powerup == " + randomNumber);
         if (randomNumber == 0)
         {
             bullets = 15;
@@ -241,6 +239,7 @@ public class NetworkCar : NetworkBehaviour {
         return randomNumber;
     }
 
+    // Method which calls correct method based on current powerup
     public int usePowerUp(int powerUp)
     {
         if (powerUp == 0) // * Shooting
@@ -250,13 +249,10 @@ public class NetworkCar : NetworkBehaviour {
                 _shootingTimer = 0.2f;
                 CmdFireGun();
                 bullets--;
-                Debug.Log("Bullets == " + bullets);
             }else if (bullets <= 0)
             {
-                Debug.Log("Bullets 000");
                 powerUp = -1;
                 _powerUpTimer = 8.0f;
-                Debug.Log("powerUp in bullets == " + powerUp);
             }
             if (_shootingTimer > 0)
                 _shootingTimer -= Time.deltaTime;
@@ -267,7 +263,6 @@ public class NetworkCar : NetworkBehaviour {
             _powerUpTimer = 8.0f;
         } else if (powerUp == 2)
         {
-            Debug.Log("RefillHealth");
             CmdRefillHealth();
             powerUp = -1;
             _powerUpTimer = 8.0f;
@@ -282,10 +277,10 @@ public class NetworkCar : NetworkBehaviour {
         return powerUp;
     }
 
+    // Method for triggering checkpoints
     public string lastCheckpoint;
     public void OnLapTrigger(trackLapTrigger trigger)
     {
-        Debug.Log("PlayerName trig = " + playerName);
         if (trigger == next)
         {
             lastCheckpoint = trigger.getCheckpointName();
@@ -307,7 +302,6 @@ public class NetworkCar : NetworkBehaviour {
 
     void SetNextTrigger(trackLapTrigger trigger)
     {
-        Debug.Log("TRIGGERED!");
         next = trigger.next;
         SendMessage("OnNextTrigger", next, SendMessageOptions.DontRequireReceiver);
     }
@@ -338,7 +332,7 @@ public class NetworkCar : NetworkBehaviour {
     public void LocalDestroy()
     {
         if (!_canControl)
-            return;//already destroyed, happen if destroyed Locally, Rpc will call that later
+            return;
 
         EnableCar(false);
     }

@@ -12,9 +12,6 @@ public class NetworkGameManager : NetworkBehaviour
     static public List<NetworkCar> FinishPositions = new List<NetworkCar>();
 
     
-
-
-   // [SyncListString]
     static public List<string> PlayerRanks = new List<string>();
     static public NetworkGameManager sInstance = null;
 
@@ -80,7 +77,7 @@ public class NetworkGameManager : NetworkBehaviour
         Leaderboard = (Text)GameObject.Find("Leaderboard").GetComponent(typeof(Text));
         for (int i = 0; i < MPFinish.finishPositions.Count; i++)
         {
-            Debug.Log("ヽ༼ຈل͜ຈ༽ﾉ raise your dongers: " + MPFinish.finishPositions.Count);
+            
             Leaderboard.text += "1st " + MPFinish.finishPositions[i];
         }
     }

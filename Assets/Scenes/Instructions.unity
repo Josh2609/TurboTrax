@@ -507,7 +507,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Turbo Trax is a 2d racing game played from the top down perspective.
+  m_Text: 'Cars are controlled with WASD or the Arrow Keys.
+
+    Weapons and abilities are used with the space bar.'
 --- !u!222 &649142737
 CanvasRenderer:
   m_ObjectHideFlags: 0
