@@ -63,7 +63,7 @@ public class NetworkCar : NetworkBehaviour {
     //**
     Sprite[] carSprites;
 
-    PlayerView powerUpUI;
+    PlayerView playerView;
     void Awake()
     {
         //register the spaceship in the gamemanager, that will allow to loop on it.
@@ -73,8 +73,8 @@ public class NetworkCar : NetworkBehaviour {
         MainCamera.enabled = false;
         camera.enabled = false;
         Leaderboard = (Text)GameObject.Find("Leaderboard").GetComponent(typeof(Text));
-        powerUpUI = gameObject.GetComponent<PlayerView>();
-        powerUpUI.manualStart();
+        playerView = gameObject.GetComponent<PlayerView>();
+        playerView.manualStart();
     }
     
     public override void OnStartLocalPlayer()
@@ -227,30 +227,17 @@ public class NetworkCar : NetworkBehaviour {
 
     public int setPowerUp()
     {
-        /* Randomly generated number corresponds to certain power up
-         * 0 = guns(50 ammo?)
-         * 1 = mine
-         * 2 = health refill
-         * 3 = temp (how long?) speed boost
-         * 4 = rocket (instant kill)
-         * 5 = tacks? speed debuff for car hit
-         * 6 = armor?
-         */
         int randomNumber = UnityEngine.Random.Range(0, 7);
         if (randomNumber == 3)
         {
             randomNumber = 0;
         }
-        randomNumber = 0;
         Debug.Log("Powerup == " + randomNumber);
         if (randomNumber == 0)
         {
             bullets = 15;
         }
-        if(onPowerUpChange != null)
-        {
-            onPowerUpChange(randomNumber);
-        }
+        if(onPowerUpChange != null) { onPowerUpChange(randomNumber); } //informs any observers
         return randomNumber;
     }
 
@@ -382,21 +369,11 @@ public class NetworkCar : NetworkBehaviour {
     void CmdFireGun()
     {//
         var bullet = spawnManager.GetFromPool(bulletSpawn.transform.position);
-        bullet.GetComponent<Rigidbody2D>().velocity = transform.up * 6;
         bullet.GetComponent<Rigidbody2D>().transform.rotation = bulletSpawn.transform.rotation;
-
+        bullet.GetComponent<Rigidbody2D>().velocity = transform.up * 16;
         NetworkServer.Spawn(bullet, spawnManager.assetId);
 
         StartCoroutine(Destroy(bullet, 2.0f));
-
-        //var bullet = (GameObject)Instantiate(
-        //    bulletPrefab,
-        //    bulletSpawn.position,
-        //    bulletSpawn.rotation);
-
-        //bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
-        //NetworkServer.Spawn(bullet);
-        //Destroy(bullet, 2.0f);
     }
 
     public IEnumerator Destroy(GameObject go, float timer)

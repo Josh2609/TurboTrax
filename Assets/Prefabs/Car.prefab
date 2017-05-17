@@ -254,7 +254,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1256693661204476}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 4.79, z: 0}
   m_LocalScale: {x: 2.9744911, y: 2.9744911, z: 2.9744911}
   m_Children: []
   m_Father: {fileID: 4838312666318996}
@@ -397,15 +397,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34cd095ec18d99c4a9abc2a77956aebf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  acceleration: 3
-  speedDecay: 0.96
-  rotationStep: 10
-  maxSpeed: 10
-  backspeed: 1
-  speed: 2
-  turning: 2
-  friction: 3
-  currentSpeed: {x: 0, y: 0}
   Leaderboard: {fileID: 0}
   finished: 0
   bulletPrefab: {fileID: 1287460028033244, guid: 96f59fef46645de469bf1063ac5b290a,
@@ -626,7 +617,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 11s
+  m_Text: 7
 --- !u!114 &114846768264194240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -866,15 +857,14 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 224428817110931152}
+  m_Children: []
   m_Father: {fileID: 224482367472987870}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 305.8, y: 142.9}
-  m_SizeDelta: {x: 116.2, y: 116.2}
+  m_AnchoredPosition: {x: 355.3, y: 176.5}
+  m_SizeDelta: {x: 51.4, y: 65.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224262227568932426
 RectTransform:
@@ -905,12 +895,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 224200306214884968}
-  m_RootOrder: 0
+  m_Father: {fileID: 224482367472987870}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 355.3, y: 176.50003}
   m_SizeDelta: {x: 65.1, y: 49.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224482367472987870
@@ -924,6 +914,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 224097009729083918}
+  - {fileID: 224428817110931152}
   - {fileID: 224200306214884968}
   m_Father: {fileID: 224733526914534596}
   m_RootOrder: 1

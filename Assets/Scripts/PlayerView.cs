@@ -12,7 +12,8 @@ public class PlayerView : MonoBehaviour {
         car = gameObject.GetComponent<NetworkCar>();
         car.onPowerUpChange += changePowerUpImage;
         car.onPowerUpTimerChange += changePowerUpTime;
-        car.onLapChange += changeLapCount;  
+        car.onLapChange += changeLapCount;
+        powerUpUI.enabled = false;
     }
     public Sprite bulletSprite;
     public Sprite mineSprite;
@@ -24,7 +25,6 @@ public class PlayerView : MonoBehaviour {
 
     public void changeLapCount(int currentLap, int maxLaps)
     {
-        Debug.Log("Workds");
         lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, maxLaps);
     }
 
@@ -62,11 +62,11 @@ public class PlayerView : MonoBehaviour {
         }
         else if (powerup == 2)
         {
-            powerUpUI.sprite = rocketSprite;
+            powerUpUI.sprite = healthSprite;
         }
         else if (powerup == 4)
         {
-            powerUpUI.sprite = healthSprite;
+            powerUpUI.sprite = rocketSprite;
         }
     }
 }
