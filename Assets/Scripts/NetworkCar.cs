@@ -11,23 +11,14 @@ public class NetworkCar : NetworkBehaviour {
 
     SpawnManager spawnManager;
 
+    public delegate void changeLapCounterUI(int currentLap, int lapCount);
+    public event changeLapCounterUI onLapChange;
+
     public delegate void changePowerUpUI(int powerup);
     public event changePowerUpUI onPowerUpChange;
 
     public delegate void changePowerUpTimerUI(float _powerUpTimer);
     public event changePowerUpTimerUI onPowerUpTimerChange;
-
-    public float acceleration = 0.4f; //5f;
-    public float speedDecay = 0.96f;
-    public float rotationStep = 10f;
-
-    public float maxSpeed = 10f;//7.0f;
-    public float backspeed = 1f;
-
-    public float speed = 7.0f;
-    public float turning = 1.0f;
-    public float friction = 2.0f;
-    public Vector2 currentSpeed;
 
     public Text Leaderboard;
     static int powerUp;
@@ -44,8 +35,6 @@ public class NetworkCar : NetworkBehaviour {
     public Transform mineSpawn;
     //**
     public Camera camera;
-
-   // public GameObject bulletPrefab;
 
     [SyncVar]
     public string playerName = "player";
@@ -101,10 +90,9 @@ public class NetworkCar : NetworkBehaviour {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _collider2D = GetComponent<Collider2D>();
 
-        lapCounterUI.text = currentLap + "/" + lapCount;
+        if (onLapChange != null) { onLapChange(currentLap, lapCount); } // informs any observers
         first = (trackLapTrigger)GameObject.Find("StartFinish").GetComponent(typeof(trackLapTrigger));
         SetNextTrigger(first);
-        UpdateText();
 
         setColor();
         //Leaderboard.enabled = false;
@@ -155,8 +143,6 @@ public class NetworkCar : NetworkBehaviour {
         _lapText.resizeTextForBestFit = true;
         _lapText.color = color;
         _wasInit = true;
-
-        UpdateLapText();
     }
 
     void OnDestroy()
@@ -238,11 +224,6 @@ public class NetworkCar : NetworkBehaviour {
             return;
     }
 
-    void UpdateText()
-    {
-        lapCounterUI.text = string.Format("Lap {0}/{1}", currentLap, lapCount);
-    }
-
     public int setPowerUp()
     {
         /* Randomly generated number corresponds to certain power up
@@ -263,7 +244,7 @@ public class NetworkCar : NetworkBehaviour {
         Debug.Log("Powerup == " + randomNumber);
         if (randomNumber == 0)
         {
-            bullets = 10;
+            bullets = 15;
         }
         if(onPowerUpChange != null)
         {
@@ -328,7 +309,7 @@ public class NetworkCar : NetworkBehaviour {
                     Kill();
                 }
                 currentLap++;
-                UpdateText();
+                if (onLapChange != null) { onLapChange(currentLap, lapCount); } // informs any observers
             }
             SetNextTrigger(next);
         }
@@ -375,16 +356,9 @@ public class NetworkCar : NetworkBehaviour {
     [Server]
     public void Kill()
     {
-
-        lapCount -= 1;
+        lapCount = 0;
         RpcDestroyed();
         EnableCar(false);
-
-            if (lapCount > 0)
-            {
-                //we start the coroutine on the manager, as disabling a gameobject stop ALL coroutine started by it
-                NetworkGameManager.sInstance.StartCoroutine(NetworkGameManager.sInstance.WaitForRespawn(this));
-            }
     }
 
     [Server]

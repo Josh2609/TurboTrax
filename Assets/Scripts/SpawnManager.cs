@@ -2,6 +2,9 @@
 using UnityEngine.Networking;
 using System.Collections;
 
+
+// class for managing the bullet spawn pool
+// code from https://docs.unity3d.com/Manual/UNetCustomSpawning.html
 public class SpawnManager : MonoBehaviour {
     public int m_ObjectPoolSize = 5;
     public GameObject m_Prefab;

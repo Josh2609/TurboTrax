@@ -11,7 +11,8 @@ public class PowerUpUI : MonoBehaviour {
         Debug.Log("Print");
         car = gameObject.GetComponent<NetworkCar>();
         car.onPowerUpChange += changePowerUpImage;
-        car.onPowerUpTimerChange += changePowerUpTime;  
+        car.onPowerUpTimerChange += changePowerUpTime;
+        car.onLapChange += changeLapCount;  
     }
     public Sprite bulletSprite;
     public Sprite mineSprite;
@@ -19,6 +20,13 @@ public class PowerUpUI : MonoBehaviour {
     public Sprite healthSprite;
     public Image powerUpUI;
     public Text powerUpTimer;
+    public Text lapCounterUI;
+
+    public void changeLapCount(int currentLap, int maxLaps)
+    {
+        Debug.Log("Workds");
+        lapCounterUI.text = string.Format("Lapssss {0}/{1}", currentLap, maxLaps);
+    }
 
     public void changePowerUpTime(float timer)
     {
